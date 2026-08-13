@@ -1,0 +1,2549 @@
+# Changelog
+
+**Last Updated: 2026-07-27**
+
+### 2026-07-27
+
+* Updated [Price Range Execution Rules FAQ](./faqs/price_range_execution_rules_CN.md#externalCalculationId4), external reference price calculation method has been added.
+
+---
+
+### 2026-07-17
+
+The following will take place on **2026-08-04 at approximately 07:00 UTC**.
+
+* The update speed in the following SBE market data streams will change from **25ms to 20ms**.
+  * SBE Market Data Streams: [Diff. Depth Stream](sbe-market-data-streams_CN.md#diff-depth-streams)
+  * FIX SBE: [MarketDataIncrementalRefresh](fix-api_CN.md#marketdataincrementaldepth)
+
+---
+
+### 2026-07-01
+
+**Note: The following changes will be rolled out on 2026-07-07 and may take a few days to complete deployment.**
+
+#### New Features
+
+* Exchange Information responsemay have a new `symbolStatus` value `CANCEL_ONLY`.
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+* REST and WebSocket API SBE schema [spot_3_5.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_5.xml)
+  * The current schema 3:4 [spot_3_4.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_4.xml) is now deprecated and will be retired in 6 months per our schema deprecation policy.
+  * Changes in schema 3:5:
+    * Updated `symbolStatus` enum: new value `CANCEL_ONLY` added
+
+---
+
+### 2026-06-24
+
+* Starting from **2026-07-09 07:00 UTC**, [WebSocket Market Data Streams](web-socket-streams_CN.md) will undergo infrastructure upgrades, with the entire upgrade process taking up to 1 hour.
+* During the upgrade, your WebSocket connections may be disconnected; if this occurs, please reconnect.
+
+---
+
+### 2026-06-22
+
+REST and WebSocket API:
+
+* Note: Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema), SBE schema 3:1 will be retired on 2026-06-29.
+* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+
+---
+
+### 2026-06-10
+
+#### FIX API
+
+* Documentation update: `LastFragment (893)` was removed from [FIX API](./fix-api_CN.md#marketdataincrementalrefresh) 
+  * As mentioned in the previous announcement, `MarketDataIncrementalRefresh <X>` message has not been fragmented since 2025-12-18, and the server no longer sends `LastFragment (893)`.
+  * This field has been removed from [FIX API](fix-api_CN.md) field list and the corresponding [QuickFIX MD schema](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) has been removed.
+* Documentation update: Updated [News `<B>`](./fix-api_CN.md#news-b) message description to align with [2026-06-09](#2026-06-09) announcement.
+
+---
+
+### 2026-06-09
+
+**Updates:**
+
+* Updated [Price Range Execution Rules FAQ](./faqs/price_range_execution_rules_CN.md#externalCalculationId1), external reference price calculation method has been added.
+
+When the **server is about to shut down**, a `serverShutdown` event will be sent; when you receive this event, disconnect and establish a new connection.
+
+All descriptions of fixed time periods before server shutdown have been removed from the documentation.
+
+* [SBE Market Data Streams](./sbe-market-data-streams_CN.md#serverShutdown) documentation was updated with information about the `serverShutdown` event.
+  * ~~The system will send the `serverShutdown` event 10 minutes before disconnecting.~~
+  * Please establish a new connection as quickly as possible to prevent interruption.
+  * Note that the `serverShutdown` event will be sent via WebSocket text frames in JSON format.
+
+---
+
+### 2026-06-03
+
+* Chinese documentation terminology harmonization and proofreading:
+  * Standardized terminology: `commission fee`/`trading fee` → `commission`, `Smart Order Routing` → `Smart Order Routing`, `WebSocket account push` → `User Data Stream`, `order book (typo)` → `order book`, etc.
+  * Corrected phrasing and formatting issues in some documents.
+
+---
+
+### 2026-05-11
+
+**Note: The following changes will take effect on 2026-05-12 at approximately 07:00 UTC.**
+
+* Added [Block Trades](https://www.axvn.vn/zh-CN/support/faq/detail/557f95eaf8fb4460aed0a891d42a1425) WebSocket market data stream support.
+  * New stream:
+    * `<symbol>@blockTrade`
+
+---
+
+### 2026-05-06
+
+**Note: The following changes will be rolled out on 2026-05-08 at approximately 06:00 UTC and may take several hours to complete.**
+
+* A `serverShutdown` event was added to [WebSocket API](./web-socket-api_CN.md#serverShutdown) and [WebSocket Market Data Streams](./web-socket-streams_CN.md#serverShutdown).
+  * The system will send the `serverShutdown` event 10 minutes before disconnecting.
+
+* When the [`reference price`](./faqs/price_range_execution_rules_CN.md) exists and is non-empty,  [`PERCENT_PRICE`](./filters_CN.md#percent_price), [`PERCENT_PRICE_BY_SIDE`](./filters_CN.md#percent_price_by_side), [`MIN_NOTIONAL`](./filters_CN.md#min_notional), and [`NOTIONAL`](./filters_CN.md#notional) filters will now use the `reference price`. When the reference price does not exist or is empty, these filters will fall back to their original behavior.
+
+* [Block Trades](https://www.axvn.vn/zh-CN/support/faq/detail/557f95eaf8fb4460aed0a891d42a1425) market data.
+  * New endpoints/methods
+    * REST API:
+      * `GET /api/v3/historicalBlockTrades`
+    * WebSocket API:
+      * `blockTrades.historical`
+
+* Order query responses may contain an [`expiryReason`](./enums_CN.md#expiryreasons) field.
+  * This field is only returned for **expired orders**, to help users understand the reason for order expiry, including cases where orders expire due to the **price range execution rule**.
+  * This field will be included in JSON and SBE 3:4 responses.
+  * Applicable to the following endpoints/methods:
+    * REST API:
+      * `GET /api/v3/order`
+      * `GET /api/v3/allOrders`
+      * `GET /api/v3/orderList`
+      * `GET /api/v3/allOrderList`
+    * WebSocket API:
+      * `order.status`
+      * `allOrders`
+      * `orderList.status`
+      * `allOrderLists`
+
+* REST and WebSocket API SBE schema 3:4
+  * The current schema 3:3 [spot_3_3.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_3.xml) is now deprecated and will be retired in 6 months per our schema deprecation policy.
+  * Changes in schema 3:4:
+    * new message `BlockTradesResponse`
+    * new type `blockTradeId`
+    * New field `expiryReason` added to `OrderResponse` and `OrdersResponse`
+
+---
+
+### 2026-04-28
+
+* Corrected the JSON content corresponding to the [`How does the Price Range Execution Rule work?`](./faqs/price_range_execution_rules_CN.md#how-does-the-price-range-execution-rule-work) question in the Price Range Execution Rules FAQ.
+
+---
+
+### 2026-04-17
+
+The following will take place on **2026-05-05 at approximately 10:00 UTC**.
+
+* The update speed in the following SBE market data streams will change from **50ms to 25ms**.
+  * SBE Market Data Streams: [Diff. Depth Stream](sbe-market-data-streams_CN.md#diff-depth-streams)
+  * FIX SBE: [MarketDataIncrementalRefresh](fix-api_CN.md#marketdataincrementaldepth)
+
+---
+
+### 2026-04-16
+
+* Updated documentation to clarify thatif a trading pair has never had a reference price set, querying the reference price will return error code [`-2043`](errors_CN.md#-2043-no_reference_price). This rule applies to the following endpoints/methods:
+  * REST API:`GET /api/v3/referencePrice`
+  * WebSocket API:`referencePrice`
+
+---
+
+### 2026-04-15
+
+* The "WebSocket Account Interface" document has been renamed to "User Data Stream". See: [User Data Stream](user-data-stream_CN.md). References to related terms have also been updated accordingly.
+* Corrected some discrepancies between the Chinese and English versions caused by translation or formatting issues.
+
+---
+
+### 2026-04-06
+
+* Added information about [Price Range Execution Rules](./faqs/price_range_execution_rules_CN.md#price_range_enforcement) rule enforcement information.
+
+---
+
+### 2026-04-02
+
+Note on the request weight calculation for certain endpoints from the [2026-03-27](#2026-03-27) announcement:
+
+For amended orders, the request weight only becomes 0 if the order expires due to that amendment.
+Successful requests that do not cause order expiry will still consume weight as described in the documentation.
+Failed requests will also consume weight according to the calculation method described in the documentation.
+
+This rule applies to the following endpoints and methods:
+* REST API: `PUT /api/v3/order/amend/keepPriority`
+* WebSocket API: `order.amend.keepPriority`
+
+---
+
+### 2026-03-30
+
+* Updated [Price Range Execution Rules](./faqs/price_range_execution_rules_CN.md#execution_price_limits) to describe order execution price limits.
+
+---
+
+### 2026-03-27
+
+The following will take effect on **2026-04-02 at approximately 07:00 UTC**.
+
+* `RAW_REQUESTS` rate limit has been increased to 300,000 per 5 minutes.
+* The request weight for the following endpoints and methods becomes 0 when the request is successful. Failed requests will still be counted according to the weight calculation method defined in the documentation.<br> IPs that only successfully call these endpoints will never be subject to the `REQUEST_WEIGHT` rate limit.
+  * REST API
+    * `POST /api/v3/order`
+    * `POST /api/v3/sor/order`
+    * `DELETE /api/v3/order`
+    * `DELETE /api/v3/openOrders`
+    * `POST /api/v3/order/cancelReplace`
+    * `POST /api/v3/order/oco`
+    * `POST /api/v3/orderList/oco`
+    * `POST /api/v3/orderList/oto`
+    * `POST /api/v3/orderList/otoco`
+    * `POST /api/v3/orderList/opo`
+    * `POST /api/v3/orderList/opoco`
+    * `DELETE /api/v3/orderList`
+    * `PUT /api/v3/order/amend/keepPriority` (see the [\1](#\2) update)
+  * WebSocket API
+    * `order.place`
+    * `sor.order.place`
+    * `order.cancel`
+    * `openOrders.cancelAll`
+    * `order.cancelReplace`
+    * `orderList.place`
+    * `orderList.place.oco`
+    * `orderList.place.oto`
+    * `orderList.place.otoco`
+    * `orderList.place.opo`
+    * `orderList.place.opoco`
+    * `orderList.cancel`
+    * `order.amend.keepPriority` (see the [\1](#\2) update)
+
+
+* [STP TRANSFER mode](./faqs/stp_faq_CN.md) will take effect on **2026-04-02 07:00 UTC**
+
+---
+
+### 2026-03-13
+
+* An external reference price calculation method was added to [Price Range Execution Rules](./faqs/price_range_execution_rules_CN.md#externalCalculationId0).
+
+---
+
+### 2026-03-11
+
+**Notice:** FIX TLS connection update will take place on **2026-06-08**, starting at **03:00 UTC**, expected to take approximately 1 hour.
+
+**Please take note and act promptly:**
+
+* During the update, existing FIX connections may be intermittently disconnected. To ensure successful reconnection and new connections after the update, please confirm that your client sends SNI (Server Name Indication) during the TLS handshake and performs certificate validation against the target hostname before we apply the update.
+* Clients that do not send SNI may receive certificate error messages during or after the update, causing TLS handshake or hostname validation failures. This may occur with certain Node.js clients that are not configured to send SNI.
+* Please refer to [FIX API documentation](./fix-api_CN.md#general-api-information) for full details.
+
+---
+
+### 2026-03-10
+
+Clarified information about [Price Range Execution Rules](./faqs/price_range_execution_rules_CN.md#matching-engine-calculation) reference price calculation method.
+
+---
+
+### 2026-03-09
+
+**Note:** These changes will be rolled out gradually and are expected to take approximately three weeks to complete.
+
+#### New Features
+
+* [Price Range Execution Rules](./faqs/price_range_execution_rules_CN.md))
+  * New endpoints/methods
+    * REST API:
+      * `GET /api/v3/executionRules`
+      * `GET /api/v3/referencePrice`
+      * `GET /api/v3/referencePrice/calculation`
+    * WebSocket API:
+      * `executionRules`
+      * `referencePrice`
+      * `referencePrice.calculation`
+  * New JSON data stream: `<symbol>@referencePrice`
+* REST and WebSocket API SBE schema 3:3
+  * The current schema 3:2 [spot_3_2.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_2.xml) is now deprecated and will be retired within 6 months per our schema deprecation policy.
+  * Changes in schema 3:3:
+    * new message `ExecutionRulesResponse`
+    * new message `PriceRangeExecutionRule`(embedded in `ExecutionRulesResponse`)
+    * new message `ReferencePriceResponse`
+    * new message `ReferencePriceCalculationResponse`
+    * new enum `executionRuleType`
+    * new enum `expiryReason`
+    * new enum `calculationType`
+    * New field `expiryReason` added to `NewOrderResultResponse`, `NewOrderFullResponse`, `NewOrderListResultResponse`, and `NewOrderListFullResponse`
+    * New field `expiryReason` added to `ExecutionReportEvent`
+    * new message `ServerShutdownEvent` (WebSocket API only)
+* FIX SBE schema 1:1
+  * This schema will be used for FIX Order Entry, FIX Drop Copy, and FIX Market Data Feed.
+  * The current FIX schema 1:0 [spot-fixsbe-1_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) is now deprecated and will be retired within 6 months per our schema deprecation policy.
+  * Changes in schema 1:1:
+    * new enum `expiryReason`
+    * New field `ExpiryReason` added to `ExecutionReport`
+
+#### FIX API
+
+* Optional new field `ExpiryReason <25056>` in `ExecutionReport <T>` message.
+  * Updated QuickFIX Schema for FIX Market Data Feed and FIX Order Entry.
+
+#### WebSocket API
+
+* New `serverShutdown` event added.
+
+#### Upcoming Changes
+
+* The following endpoints were deprecated on **2019-11-13** and will be retired on **2026-03-25**:
+  * `GET /api/v1/ping`
+  * `GET /api/v1/time`
+  * `POST /api/v1/userDataStream`
+  * `PUT /api/v1/userDataStream`
+  * `GET /api/v1/ticker/bookTicker`
+  * `GET /api/v1/ticker/price`
+  * `GET /api/v1/klines`
+  * `GET /api/v1/historicalTrades`
+  * `GET /api/v1/depth`
+  * `GET /api/v1/aggTrades`
+  * `GET /api/v1/ticker/24hr`
+* The following endpoints will be retired on **2026-03-25**:
+  * `GET /api/v1/userDataStream`
+  * `DELETE /api/v1/userDataStream`
+  * `GET /api/v1/trades`
+* **following changes will take effect on 2026-03-26 at approximately 07:00 UTC**
+  * Order placement and order list placement endpoint responses will show order expiry reason based on the value of `newOrderRespType`:
+    * If `newOrderRespType=ACK`, no expiry reason is shown.
+    * If `newOrderRespType=RESULT` or `newOrderRespType=FULL`, if order expiry occurs, the expiry reason is shown in the `expiryReason` field.
+      * Affected endpoints/methods include:
+        * REST API
+          * `POST /api/v3/order`
+          * `POST /api/v3/sor/order`
+          * `POST /api/v3/order/cancelReplace`
+          * `POST /api/v3/order/oco`
+          * `POST /api/v3/orderList/oco`
+          * `POST /api/v3/orderList/oto`
+          * `POST /api/v3/orderList/otoco`
+          * `POST /api/v3/orderList/opo`
+          * `POST /api/v3/orderList/opoco`
+        * WebSocket API
+          * `order.place`
+          * `sor.order.place`
+          * `order.cancelReplace`
+          * `orderList.place`
+          * `orderList.place.oco`
+          * `orderList.place.oto`
+          * `orderList.place.otoco`
+          * `orderList.place.opo`
+          * `orderList.place.opoco`
+  * In the User Data Stream, `executionReport` events have a new optional field `eR`, which is used to display the order expiry reason if an order expires.
+
+
+---
+
+### 2026-02-24
+
+* The [ICEBERG_PARTS](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/filters#iceberg_parts-%E5%86%B0%E5%B1%B1%E8%AE%A2%E5%8D%95%E6%8B%86%E5%88%86%E6%95%B0) for all trading pairs will be increased to 100 on **2026-03-12 07:00 UTC**.
+* Per the [2025-12-02](#2025-12-02) announcement, `!ticker@arr` will be retired on **2026-03-24 07:00 UTC**.
+
+---
+
+### 2026-02-12
+
+REST and WebSocket API:
+
+* Note: Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema), SBE schema 3:0 will be retired on 2026-02-19.
+* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+
+---
+
+### 2026-02-09
+
+* Clarified requirements for exponent fields in [FIX SBE documentation](fix-api_CN.md#fix-sbe).
+
+---
+
+### 2026-02-02
+
+* Documented the 1-second data delay in [FIX Drop Copy sessions](fix-api_CN.md#fix-api-drop-copy-sessions). This delay has existed since the FIX API was launched.
+
+---
+
+### 2026-01-29
+
+* [Demo trading](./demo-mode/general-info_CN.md) is now available.
+* For information about times when the spot demo trading environment is unavailable due to maintenance, see the [Demo Trading Changelog](./demo-mode/CHANGELOG_CN.md).
+
+---
+
+### 2026-01-27
+
+**Notice: The following changes will take effect on 2026-02-11 07:00 UTC:**
+
+* The [ICEBERG_PARTS](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/filters#iceberg_parts-%E5%86%B0%E5%B1%B1%E8%AE%A2%E5%8D%95%E6%8B%86%E5%88%86%E6%95%B0) for all trading pairs will be increased to 50.
+
+---
+
+### 2026-01-26
+
+* Added documentation for the `recvWindow` field in `userDataStream.suaxvnscribe.signature`.
+
+---
+
+### 2026-01-21
+
+Per the **2025-10-24** announcement, the following endpoints and methods will no longer be available from **2026-02-20 07:00 UTC**.
+
+## REST API
+
+- `POST /api/v3/userDataStream`
+- `PUT /api/v3/userDataStream`
+- `DELETE /api/v3/userDataStream`
+
+## WebSocket API
+
+- `userDataStream.start`
+- `userDataStream.ping`
+- `userDataStream.stop`
+
+---
+
+### 2025-12-18
+
+* [FIX SBE documentation](fix-api_CN.md#fix-sbe) has been updated.
+* Clarified the description of [`eventStreamTerminated`](user-data-stream_CN.md#event-stream-terminated) in the User Data Stream documentation.
+* Assets `这是测试币` (test coin) and `456` and trading pair `这是测试币456` have been added to the [Spot Testnet](http://testnet.axvn.vn) for users to test endpoints/methods with Unicode trading pair names. For details, see the [Spot Testnet Changelog](https://developers.axvn.vn/docs/axvn-docs-api/testnet).
+
+---
+
+### 2025-12-17
+
+#### Time-Sensitive Notice
+
+* **The following REST API change will take effect on 2026-01-15 07:OO UTC:** <br> When calling endpoints that require a signature, please percent-encode the payload before calculating the signature. Requests that do not follow this order will be rejected with error code [`-1022 INVALID_SIGNATURE`](errors_CN.md#-1022-invalid_signature). Please check and update the signature logic in your code accordingly. This feature is now enabled on the [SPOT Testnet](http://testnet.axvn.vn).
+
+#### REST API
+
+* Updated the [Signed request examples](rest-api_CN.md#hmac-keys) section in the REST API documentation.
+
+#### WebSocket API
+
+* Updated the [Signed request examples](web-socket-api_CN.md#hmac) section in the WebSocket API documentation.
+
+---
+
+### 2025-12-15
+
+**Note on UTF-8 Encoding:**
+
+* In [FIX API](fix-api_CN.md), [REST API](rest-api_CN.md), and [WebSocket API](web-socket-api_CN.md), if your request contains a trading pair name with non-ASCII characters, the response may contain non-ASCII characters encoded as UTF-8.
+* In the REST and WebSocket API, even if the request itself does not contain non-ASCII characters, some endpoints/methods may return asset and/or trading pair names containing non-ASCII characters encoded as UTF-8.
+* In [WebSocket Market Data Streams](web-socket-streams_CN.md), if your request contains a trading pair name with non-ASCII characters, stream events may contain non-ASCII characters encoded as UTF-8.
+* In WebSocket Market Data Streams, [All Market Mini Ticker](web-socket-streams_CN.md#all-markets-mini-ticker) and [All Market Rolling Window Ticker](web-socket-streams_CN.md#all-market-rolling-window-ticker) events may contain non-ASCII characters encoded as UTF-8.
+* In [SBE Market Data Streams](sbe-market-data-streams_CN.md), if your request contains a trading pair name with non-ASCII characters, stream events may contain non-ASCII characters encoded as UTF-8.
+* If you hold or trade any assets or trading pairs whose names contain non-ASCII characters, [User Data Stream](user-data-stream_CN.md) events may contain non-ASCII characters encoded as UTF-8.
+* For full compatibility with the Axvn API, please ensure your code can handle UTF-8 encoded strings.
+
+---
+
+### 2025-12-09
+
+* [FIX SBE Schema](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) updated to use `smallGroupSize16Encoding` in `MarketDataSnapshot`, and `presence="optional"` for the `MDEntrySize` field in incremental single trading pair order book / depth streams.
+* Updated documentation on [FIX vs FIX SBE](fix-api_CN.md#fix-vs-fix-sbe-schema).
+* Added a note in the REST and WebSocket API documentation: **Please avoid using SQL keywords in requests**, as this may trigger Web Application Firewall (WAF) rules and cause security blocks. For details, see https://www.axvn.vn/zh-CN/support/faq/detail/360004492232 .
+
+---
+
+### 2025-12-02
+
+**Note: The changes in this section will be rolled out gradually and are expected to take approximately two weeks to complete.**
+
+#### General Changes
+
+* The `symbol` and `symbols` parameters now support UTF-8 encoded Unicode values.
+* Per the [2025-11-14](#2025-11-14) announcement, all content related to `!ticker@arr` has been removed from documentation.
+  * This feature will continue to be available until a future deprecation announcement.
+  * Please use `<symbol>@ticker` or `!miniTicker@arr` instead.
+
+#### FIX API
+
+* FIX messages now accept UTF-8 encoded Unicode values. Only the following tags are permitted:
+  * `Currency (15)`
+  * `MiscFeeCurr (138)`
+  * `Symbol (55)`
+  * `SecondarySymbol (25019)`
+  * `CounterSymbol (25028)`
+  * `SecurityDesc (107)`
+* When Unicode appears in values of tags other than those listed above, the FIX API returns the `RefTagID (371)` tag in a reject message `<3>` to indicate which specific tag does not allow Unicode.
+* `NewOrderList <E>` can now accept `TriggerPriceDirection (1109)` without `TriggerPrice (1102)`.
+
+#### WebSocket Data Streams
+
+* WebSocket Market Data Streams now support URL-encoded URLs.
+<br>
+<br>
+
+**Note: The following changes are expected to take effect on 2025-12-18 at approximately 07:00 UTC:**
+* [ICEBERG_PARTS](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/filters#iceberg_parts) will be increased to 25 for all trading pairs.
+* [FIX SBE support](fix-api_CN.md) will go live.
+* [One-Pays-the-Other (OPO)](https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/opo_CN.md) will go live for all trading pairs.
+  * `opoAllowed` will start appearing in `Exchange Information` requests, indicating whether each trading pair supports One-Pays-the-Other (OPO).
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+  * New OPO requests:
+    * REST API:
+      * `POST /api/v3/orderList/opo`
+      * `POST /api/v3/orderList/opoco`
+    * WebSocket API:
+      * `orderList.place.opo`
+      * `orderList.place.opoco`
+    * FIX API:
+      * New field `OPO (25046)` added to `NewOrderList <E>`. Please update to the latest QuickFIX schema to support OPO.
+* New STP mode [`TRANSFER`](./faqs/stp_faq_CN.md) added. The specific date for enabling STP `TRANSFER` has not been determined.
+* **SBE: New schema version 3:2 ([spot_3_2.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_2.xml)).**
+  * The current schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml)) is now deprecated and will be retired in 6 months per our schema deprecation policy.
+  * Changes in schema 3:2:
+    * New enum value `TRANSFER` added for `selfTradePreventionMode` and `allowedSelfTradePreventionModes`.
+    * All schemas below 3:1 cannot return responses containing the STP mode `TRANSFER` (e.g. Exchange Information, order placement, order cancellation, or order status queries). <br>An error will be returned when the response cannot be represented by the requested schema.
+* FIX API changes:
+    * `LastFragment (893)` is deprecated.
+      * This means `MarketIncrementalRefresh <X>` messages will no longer be fragmented and may contain more than 10,000 entries.
+      * Documentation has been updated to reflect this change.
+    * `ListStatus <N>` will no longer send the optional `symbol` field.
+      * Applies to FIX Order Entry and FIX Drop Copy.
+      * Documentation has been updated to reflect this change.
+
+---
+
+### 2025-11-14
+
+* The All Market Full Ticker (`!ticker@arr`) is now deprecated; this means it will be removed from documentation and the system at a future date to be announced.
+* Please use [`<symbol>@ticker`](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/web-socket-streams#twentyfourhourticker) or [`!miniTicker@arr`](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/web-socket-streams#all-markets-mini-ticker) instead.
+
+---
+
+### 2025-11-12
+
+* The steps for [how to correctly manage a local order book](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/web-socket-streams#how-to-maintain-orderbook) have been corrected.
+
+---
+
+### 2025-11-11
+
+#### SBE Market Data Streams
+
+* **Starting 2025-11-26 07:00 UTC, the update speed for `<symbol>@depth` and `<symbol>@depth20` streams will change to 50ms**.
+  * This change will be automatically deployed to all users of SBE market data; no action is required on the client side.
+  * The total amount of data receivable per second will increase (up to 2x).
+  * The [SPOT Testnet](https://testnet.axvn.vn/) will apply these changes from **2025-11-11 07:00 UTC**.
+  * [SBE Market Data Streams](sbe-market-data-streams_CN.md) has been updated to reflect these changes.
+
+---
+
+### 2025-11-10
+
+* The "last updated" date in all documents, except the Changelog, will be removed.
+* Going forward, the Changelog will be the sole reference for the timing of all documentation changes.
+
+---
+
+### 2025-10-28
+
+**Note: The following changes will be rolled out on 2025-10-28 at approximately 04:00 UTC and may take several hours to complete.**
+
+* Optional parameter `symbolStatus` has been added to the following endpoints:
+    * **REST API**
+      * `GET /api/v3/depth`
+      * `GET /api/v3/ticker/price`
+      * `GET /api/v3/ticker/bookTicker`
+      * `GET /api/v3/ticker/24hr`
+      * `GET /api/v3/ticker/tradingDay`
+      * `GET /api/v3/ticker`
+    * **WebSocket API**
+      * `depth`
+      * `ticker.price`
+      * `ticker.book`
+      * `ticker.24hr`
+      * `ticker.tradingDay`
+      * `ticker`
+* When the `symbolStatus=<STATUS>` parameter is provided, only trading pairs whose trading status matches the specified `STATUS` will be included in the response:
+    * If a single trading pair is specified using the `symbol=<SYMBOL>` parameter but that trading pair's status does not match the specified `STATUS`, the endpoint will return error code [`-1220 SYMBOL_DOES_NOT_MATCH_STATUS`](./errors_CN.md#-1220-symbol_does_not_match_status).
+    * If multiple trading pairs are specified using the `symbols=[...]` parameter, the response will be an array. Trading pairs whose status does not match `STATUS` will not be included. When none of the trading pairs specified in the `symbols` parameter match `STATUS`, the response will be an empty array.
+    * For endpoints where the `symbol` and `symbols` parameters are optional, omitting these parameters is treated as specifying all trading pairs in the `symbols=[...]` parameter. See the previous line for `symbolStatus=<STATUS>` behavior.
+
+---
+
+### 2025-10-24
+
+#### SBE
+
+* SBE: Schema 3:1 ([spot_3_1.xml](...)) has been updated to support the [listenToken subscription method](...) for margin trading.
+
+#### REST and WebSocket API
+
+Per the [2025-04-07](#2025-04-07) announcement, all documentation for using `listenKey` on `wss://stream.axvn.vn` has been removed. Please refer to the list of requests and methods below for details.
+This feature will continue to be available until a future deprecation announcement is published.
+
+**Reminder: You should receive user account updates by subscribing to the [User Data Stream within WebSocket API](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/websocket-api/user-data-stream-requests). This provides better performance (lower latency).**
+
+Please refer to the list of requests and methods below for more details.
+
+These features will remain available until a separate deprecation announcement is published.
+
+* REST API
+  * `POST /api/v3/userDataStream`
+  * `PUT /api/v3/userDataStream`
+  * `DELETE /api/v3/userDataStream`
+
+* WebSocket API
+  * `userDataStream.start`
+  * `userDataStream.ping`
+  * `userDataStream.stop`
+
+---
+
+### 2025-10-21
+
+REST and WebSocket API:
+
+* Note: Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema), SBE schema 2:1 will be retired on 2025-10-24.
+* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+
+---
+
+### 2025-10-08
+
+* Updated [QuickFIX Schema](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) for FIX market data:
+  * Updated `RecvWindow(25000)` to support the microsecond-level feature announced on [2025-08-12](#2025-08-12).
+  * Updated [`InstrumentList`](fix-api_CN.md#instrumentlist) message:
+    * new fields added: `StartPriceRange`, `EndPriceRange`.
+    * The following fields are now optional: `MinTradeVol`, `MaxTradeVol`, `MinQtyIncrement`, `MarketMinTradeVol`, `MarketMaxTradeVol`, `MarketMinQtyIncrement`, `MinPriceIncrement`.
+  * **The changes to `InstrumentList <y>` are breaking changes, expected to be released around 2025-10-23 at approximately 07:00 UTC. Please update to the new schema before that date.**
+  * This breaking change has already been enabled on the [SPOT Testnet](https://testnet.axvn.vn/).
+
+---
+
+### 2025-09-29
+
+**Note: The following changes will be rolled out on 2025-09-29 at 10:00 UTC and may take several hours to complete deployment.**
+
+* A new endpoint has been added to retrieve the list of filters related to the account for a specified trading pair. This is the only endpoint that currently shows whether the `MAX_ASSET` filter is applied to the account.
+  * REST API: [`GET /api/v3/myFilters`](rest-api_CN.md#myFilters)
+  * WebSocket API: [`myFilters`](web-socket-api_CN.md#myFilters)
+* Some comments in **SBE: schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml))** have been added, updated, and removed. Although `3:1` users do not need to update to this version of the schema, we recommend updating to maintain consistency.
+* Documentation for the [`MAX_ASSET`](filters_CN.md#max_asset) filter has been added.
+
+---
+
+### 2025-09-18
+
+* Updated the documentation sections for `recvWindow` to reflect the microsecond-level support announced on [2025-08-12](#2025-08-12).
+  * REST API: [Timing Security](rest-api_CN.md#timingsecurity)
+  * WebSocket API: [Timing Security](web-socket-api_CN.md#timingsecurity)
+
+---
+
+### 2025-09-12
+
+* Updated the [QuickFIX schema](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) for the FIX Order Entry API to support pegged orders.
+* Updated the `RecvWindow` sections in the FIX API documentation:
+  * [Message Components](fix-api_CN.md#header)
+  * [Timing Security](fix-api_CN.md#timingsecurity)
+
+---
+
+### 2025-08-28
+
+* Updated the [Regarding Legacy Support](faqs/sbe_faq_CN.md#regarding-legacy-support) section of the "Simple Binary Encoding (SBE) FAQ" document with more details on schema compatibility and an explanation of the usage of `NonRepresentable` and `NonRepresentableMessage`.
+
+---
+
+### 2025-08-26
+
+* Updated the "Request Security Type" section of the [REST API](rest-api_CN.md#request-security) and [WebSocket API](web-socket-api_CN.md#request-security) documentation, with no functional changes.
+
+---
+
+### 2025-08-25
+
+* **SBE: Schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml))** will be updated on **2025-08-25 05:00 UTC**.
+  * The following fields have been renamed to resolve a compilation issue found in Java code generated by the [SbeTool](faqs/sbe_faq_CN.md#generate-sbe-decoders) code generator.
+    * Although only users affected by this issue need to update the schema, we recommend all users upgrade to the latest version for consistency.
+    * Message `MaxAssetFilter`
+      * Field `limitExponent` renamed to `qtyExponent`
+      * Field `limit` renamed to `maxQty`
+
+---
+
+### 2025-08-19
+
+* `userDataStream.subscribe` now returns `subscriptionId` in the response. <br> This was omitted from the [previous](#2025-08-12) changelog entry.
+
+---
+
+### 2025-08-12
+
+**Notice:** The changes in this section will be rolled out gradually and are expected to take approximately two weeks to complete deployment.
+
+#### General Changes
+
+* New error codes `-1120` and `1211`. For details, see [Error Codes](errors_CN.md).
+* The following requests include a new structure named `specialCommission`. See [Commission Rates](faqs/commission_faq_CN.md).
+  * REST API
+    * `GET /api/v3/account/commission`
+    * `POST /api/v3/order/test` with `computeCommissionRates=true`
+    * `POST /api/v3/sor/order/test` with `computeCommissionRates=true`
+  * WebSocket API
+    * `account.commission`
+    * `order.test` with `computeCommissionRates=true`
+    * `sor.order.test` with `computeCommissionRates=true`
+* **SBE: New schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml)) is now available.**
+  * The current schema 3:0 ([spot_3_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml)) will be deprecated and retired within 6 months per our deprecation policy.
+  * Changes in schema 3:1:
+    * `ExchangeInfoResponse`: new field `pegInstructionsAllowed` added
+    * `ExecutionReportEvent`: new fields `pricePeg`, `pricePegOffsetLevel`, and `peggedPrice` added
+    * `UserDataStreamSubscribeResponse`: new field `subscriptionId`
+    * All User Data Stream events have a new field `subscriptionId` added.
+    * For `WebSocketSessionLogonResponse`, `WebSocketSessionStatusResponse`, and `WebSocketSessionLogoutResponse`, the field `apiKey` has been renamed to `loggedOnApiKey`
+    * `OrderTestWithCommissionsResponse`: 2 new fields added — `specialCommissionForOrderMaker` and `specialCommissionForOrderTaker`
+    * `AccountCommissionResponse`: 4 new fields added — `specialCommissionMaker`, `specialCommissionTaker`, `specialCommissionBuyer`, and `specialCommissionSeller`
+    * Support for `EXCHANGE_MAX_NUM_ORDER_LISTS`, `MAX_NUM_ORDER_LISTS`, and `MAX_NUM_ORDER_AMENDS` filters.
+    * `ExecutionReportEvent`: fields `rejectReason` and `origClientOrderId` will now also show their default values in SBE format, consistent with JSON format.
+    * `NonRepresentableMessage`: a new message added to represent information that cannot be displayed using the current `schema ID` and `version`. Receiving this message indicates that content should be available but is not supported by the current SBE schema in use.
+* Orders with a final status of `EXPIRED_IN_MATCH` (i.e., orders expired due to STP) with a cumulative quantity of 0 will be archived after 90 days.
+* Order list query requests will first query cached data; if not found, the database will be queried.
+  * REST API:`GET /api/v3/openOrderLists`
+  * WebSocket API:`openOrderLists.status`
+
+#### WebSocket API
+
+* A single WebSocket connection can subscribe to multiple User Data Streams simultaneously.
+  * Per connection, each account can only have one subscription.
+* A new `userDataStream.subscribe.signature` method has been added, allowing you to subscribe to a User Data Stream without logging in first.
+  * This method does not require an Ed25519 API key and can be used with any [API Key type](faqs/api_key_types_CN.md).
+  * For [SBE support](faqs/sbe_faq_CN.md), you need to use at least schema 3:1.
+* A new `session.subscriptions` method has been added to list all active subscriptions in the current session.
+* The meaning of the `userDataStream` field in session requests has changed slightly.
+  * Previously, this field returned `true` if you had subscribed to the User Data Stream of the logged-in account.
+  * Now, it returns `true` if you have at least one active User Data Stream subscription, and `false` otherwise.
+* `userDataStream.unsubscribe` now supports closing multiple subscriptions.
+  * Calling without parameters will close all subscriptions.
+  * Calling with a `subscriptionId` will attempt to close the subscription matching that ID, if it exists.
+  * The authorization for this request has been changed to `NONE`.
+* When listening via the [WebSocket API](web-socket-api_CN.md#user-data-stream-suaxvnscribe), User Data Stream event payloads now include the field `subscriptionId`, which identifies which subscription the event is from.
+
+#### FIX API
+
+* When the client sends a reject message, the FIX API will no longer return a `<3>` reject message to the client.
+* Error messages are now clearer when a tag is invalid, missing a value, the field value is empty, or the format is incorrect.
+  * ```json
+    { "code": -1169, "msg": "Invalid tag number." }
+    ```
+  * ```json
+    { "code": -1177, "msg": "Tag specified without a value." }
+    ```
+  * ```json
+    { "code": -1102, "msg": "Field value was empty or malformed." }
+    ```
+
+#### Upcoming Changes
+
+The following changes will take effect starting **2025-08-27 07:00 UTC**:
+* Exchange Information requests will return the field `pegInstructionsAllowed`.
+* Fixed: The matching engine will no longer accept order lists with quantities exceeding the order count filter limits. Affected filters include:
+  * `MAX_NUM_ORDERS`
+  * `MAX_ALGO_ORDERS`
+  * `MAX_ICEBERG_ORDERS`
+  * `EXCHANGE_MAX_NUM_ORDERS`
+  * `EXCHANGE_MAX_ALGO_ORDERS`
+  * `EXCHANGE_MAX_ICEBERG_ORDERS`
+
+The following changes will take effect starting **2025-08-28 07:00 UTC**:
+* [Pegged Orders](faqs/pegged_orders_CN.md) functionality will be available.
+  * `pegInstructionsAllowed` will be set to `true` for all trading pairs, officially enabling pegged order functionality across all APIs.
+  * If an order is a pegged order, the following conditional fields `pegPriceType`, `pegOffSetType`, `pegOffsetValues`, and `peggedPrice` will appear in the responses of the following requests:
+    * REST API
+      * `GET /api/v3/order`
+      * `GET /api/v3/orderList`
+      * `GET /api/v3/openOrderList`
+      * `GET /api/v3/allOrders`
+      * `DELETE /api/v3/order`
+      * `DELETE /api/v3/orderList`
+      * `DELETE /api/v3/openOrders`
+      * `PUT /api/v3/order/amend/keepPriority`
+    * WebSocket API
+      * `order.status`
+      * `orderList.status`
+      * `allOrders`
+      * `order.cancel`
+      * `orderList.cancel`
+      * `openOrders.cancelAll`
+      * `order.amend.keepPriority`
+  * FIX API
+    * `OrdType(40)` supports new value `P(PEGGED)`
+    * Fields `PegOffsetValue(211)`, `PegPriceType(1094)`, `PegMoveType(835)`, and `PegOffsetType(836)` have been added to the following messages:
+      * NewOrderSingle `<D>`
+      * NewOrderList `<E>`
+      * OrderCancelRequestAndNewOrderSingle `<XCN>`
+    * When placing an order, the `ExecutionReport` `<8>` message will echo back PegInstructions with an additional optional field `PeggedPrice (839)`
+  * New pegged order error messages have been added. For details, see the [Error Codes](errors_CN.md) document.
+* Changes to `recvWindow` will be enabled.
+  * After your message leaves our message broker but before it is sent to the matching engine, a third check will be performed.
+    * This does not include potential delays within the matching engine itself.
+  * `recvWindow` now supports microsecond-level precision.
+    * The value is still specified in milliseconds, but can now include a decimal part for higher precision.
+    * This means the parameter now supports **up to 3 decimal places** (e.g., 6000.346).
+    * Affected APIs:
+      * FIX API
+      * REST API
+      * WebSocket API
+* The new [`MAX_NUM_ORDER_LISTS`](filters_CN.md#max_num_order_lists) filter will be enabled: allowing a maximum of 20 open order lists per trading pair.
+* The new [`MAX_NUM_ORDER_AMENDS`](filters_CN.md#max_num_order_amends) filter will be enabled: limiting order amendments to a maximum of 10.
+
+---
+
+### 2025-08-07
+
+* Updated FIX API documentation
+  * [FIX 市场数据限制](fix-api_CN.md#connection-limits)：订阅限制一直存在，但之前未有文档说明。
+  * [消息处理顺序](fix-api_CN.md#orderedmode)：重新措辞并调整了格式。
+
+---
+
+### 2025-07-03
+
+* Starting from **2025-07-08 07:00 UTC** 起，[WebSocket Market Data Streams](web-socket-streams_CN.md) 将会进行升级。
+* 升级期间，**现有连接和新连接可能会在 24 小时内断开**。
+* 升级过程最多可能需要 2 小时。若有不便之处，敬请谅解。
+
+---
+
+### 2025-06-04
+
+REST and WebSocket API:
+
+* Note:Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema)， SBE 2：0 模式将于 2025 年 06 月 12 日被禁用。
+* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+
+---
+
+### 2025-05-28
+
+* 在 “API 基本信息” 下，记录每个 API 的超时值和错误：
+  * [FIX](fix-api_CN.md#general-api-information)
+  * [REST](rest-api_CN.md#general-api-information)
+  * [WebSocket](web-socket-api_CN.md#general-api-information)
+
+---
+
+### 2025-05-22
+
+**Note:following changes将于 2025 年 6 月 6 日 7:00 (UTC) 生效。**
+
+* 将通过一项额外的检查，对 FIX、REST and WebSocket API 上先前关于`recvWindow` 的行为进行强化。
+  * 让我们回顾一下现有行为：
+    * 如果在接收请求时， `timestamp` 大于 `serverTime` + 1 秒，则请求会被拒绝。此检查被拒绝的话，将会增加消息限制（FIX API）和 IP 限制（REST and WebSocket API），但不会增加未成交订单计数（所有 API 的下单端点）。
+    * 如果在接收请求时， `timestamp` 和 `serverTime` 之间的差值大于 `recvWindow`，则请求被拒绝。此检查被拒绝的话，将会增加消息限制（FIX API）和 IP 限制（REST and WebSocket API），但不会增加未成交订单计数（所有 API 的下单端点）。
+  * 附加检查：
+    * 在请求转发到撮合引擎之前，如果 `timestamp` 与当前 `serverTime` 之间的差值大于 `recvWindow`，则拒绝该请求。此检查被拒绝的话，将会增加消息限制（FIX API）、IP 限制（REST and WebSocket API）以及未成交订单计数（所有 API 的下单端点）。
+  * 已更新 Timing 安全性文档，以反映新增的附加检查。
+    * [REST API](rest-api_CN.md#timingsecurity)
+    * [WebSocket API](web-socket-api_CN.md#timingsecurity)
+    * [FIX API](fix-api_CN.md#timingsecurity)
+* 修复了 FIX Market Data 消息 InstrumentList `<y>` 中的一个错误。之前，`NoRelatedSym(146)` 的值可能会不正确。
+
+---
+
+### 2025-04-29
+
+* 目前需要 Ed25519 API 密钥才能使用的功能将很快会对 HMAC 和 RSA 密钥开放。
+  * 例如，在 listenKeys 被移除前，您可以使用任何 API 密钥类型在 WebSocket API 中订阅账户数据流。
+  * 我们仍然鼓励用户迁移到 Ed25519 API 密钥，因为它们在币安现货交易中更安全、性能更佳。
+  * 更多详情即将公布，敬请关注，不要错过。
+
+---
+
+### 2025-04-25
+
+* 以下请求权重将从 1 增加到 4：
+  * REST API: `PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API: `order.amend.keepPriority`
+  * REST and WebSocket API 的文档均已更新，以反映即将发生的更改。
+* 澄清了 FIX-API 中的 `SEQNUM` 是一个累计到最大值后将会归 0，然后重新开始计数的 32 位无符号整数。自 FIX-API 诞生以来，它一直是 `SEQNUM` 数据类型。
+
+---
+
+### 2025-04-21
+
+**关于 [保留优先级的Updates订单请求 (Order Amend Keep Priority)](./faqs/order_amend_keep_priority_CN.md) 和 [STP 方式 `DECREMENT`（递减）](./faqs/stp_faq_CN.md) 发布的说明：**
+* 于 **2025-05-07 07:00 UTC**
+  * 所有trading pair将启用 ”保留优先级的Updates订单请求“ 功能。
+  * 所有trading pair将允许 “STP 递减”。
+* 自**2025年4月24日 07:00 UTC**起，`amendAllowed` 字段将在交易所信息请求中可见，但该功能尚未启用。
+* [SPOT 测试网](https://testnet.axvn.vn/) 在所有trading pair上都启用了这两项功能。
+
+---
+
+### 2025-04-08
+
+**通知:** 本节中的更改将逐步推出,需要一周时间才能完成.
+
+* 新的错误代码 `-2039`，如果查询同时具有 `orderId` 和 `origClientOrderId` 的订单，并且未找到具有此组合的订单.
+  * 受影响的请求:
+    * REST API:`GET /api/v3/order`
+    * WebSocket API:`order.status`
+* [错误代码文档](errors_CN.md) 在错误代码 `-1034` 中Updated新的错误消息, 当超过 FIX 连接速率限制时会出现。(更多细节参看昨天的 [更新](#2025-04-07))
+
+---
+
+### 2025-04-07
+
+#### General Changes
+
+**通知:** 本节中的更改将逐步推出,需要一周时间才能完成.
+
+* 在2025 年 1 月 16 日，FIX Market Data 会话的连接限制从 5 个增加到了 100 个。这个改变没有在之前的更改日志中被明示。
+* 新的错误代码 `-2038`，将在保留优先权的Updates订单请求失败时出现。
+* 错误代码 `-1034` 有了new message。
+* 如果未成交订单计数超过了在 `intervalNum:DAY` 里定义的限制, 那么 `intervalNum:SECOND` 下的未成交订单计数将不再递增。
+* 以前，无论提供的参数如何，myTrades 请求的权重都是 20。现在，如果您提供 `orderId` ，请求的权重将为 5。
+  * REST API:`GET /api/v3/myTrades`
+  * WebSocket API:`myTrades`
+* 查询和删除订单的变化：
+  * 现在，当 `orderId` 和 `origClientOrderId` 都不存在时，请求将被拒绝，并显示 `-1102` 而不是 `-1128`。
+  * 受影响的请求：
+    * REST API:
+      * `GET /api/v3/order`
+      * `DELETE /api/v3/order`
+    * WebSocket API:
+      * `order.status`
+      * `order.cancel`
+    * FIX API：
+      * OrderCancelRequest `<F>`
+
+#### FIX API
+
+**通知:** following changes将于 2025 年 4 月 21 日期间发生。
+
+* FIX API 会验证 `EncryptMethod(98)` 在登录 Logon `<A>` 时是否为 0。
+* FIX Order Entry会话的每个账户有 10 个并发 TCP 连接的限制。
+* 现在强制实施连接速率限制.请注意，这些限制是针对账户和 IP 地址独立检查的。
+  * FIX Order Entry会话：在 30 秒内 15 次连接尝试的限制
+  * FIX Drop Copy 会话：在 30 秒内 15 次连接尝试的限制。
+  * FIX Market Data 会话：在 300 秒内 300 次连接尝试的限制。
+* News `<B>` 在 Headline 字段中包括了一个倒计时消息。
+  * 在本次更新完成后： 当服务器进入维护状态时，将向客户端**每隔 10 秒发送一条** `News` 消息，并**持续 10 分钟**。在10分钟过后，客户端将被注销，其会话将被关闭。
+* OrderCancelRequest `<F>` 和 OrderCancelRequestAndNewOrderSingle `<XCN>` 现在允许使用 `orderId` 和 `clientOrderId`。
+* [FIX Order Entry会话的 QuickFix 模式](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) 已被更新，将支持保留优先级的Updates订单请求（Order Amend Keep Priority）和新的 STP 方式 `DECREMENT`。
+
+#### User Data Streams
+
+* **我们将弃用此功能： 通过使用 `listenKey` 来访问 wss://stream.axvn.vn:9443 以监听账户信息的。**
+    * 以后但不是当前，此功将被能从我们的系统中删除。
+* **您应该通过订阅 [在 WebSocket API 内的User Data Stream](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/websocket-api/user-data-stream-requests) 来获得用户账户更新。**
+  * 这个方式会提供稍好的性能 **（较低的延迟）**。
+  * 必须使用 Ed25519 API 密钥
+* 在未来的更新中，将删除有关账户数据流的 WebSocket 基本访问地址的信息。
+* 在未来的更新中，以下请求将被从文档中删除：
+    * `POST /api/v3/userDataStream`
+    * `PUT /api/v3/userDataStream`
+    * `DELETE /api/v3/userDataStream`
+    * `userDataStream.start`
+    * `userDataStream.ping`
+    * `userDataStream.stop`
+* [User Data Stream](user-data-stream_CN.md) 将保留可以接收的有效负载，以供您参考。
+
+#### 将会发生的更改
+
+following changes将于**2025 年 4 月 24 日 07:00 UTC**发生：
+
+* ~~[保留优先级的Updates订单请求（Order Amend Keep Priority）](https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/order_amend_keep_priority_CN.md) 将可以使用。 (请注意，必须在相应trading pair上启用该功能后才能使用。)~~
+  * 新字段 `amendAllowed` 会出现在 Exchange Information response中。
+    * **2025-04-21 更新 ："保留优先级的Updates订单请求" 的具体启用日期尚未确定**
+    * REST API: `GET /api/v3/exchangeInfo`
+    * WebSocket API: `exchangeInfo`
+  * FIX API：新的 Order Entry 消息 **OrderAmendKeepPriorityRequest** 和 **OrderAmendReject**
+  * REST API:`PUT /api/v3/order/amend/keepPriority`
+  * WebSocket API: `order.amend.keepPriority`
+* ~~如果已在trading pair上作了相应配置，那么 STP 方式 `DECREMENT` （递减） 将在 Exchange Information 中可见。~~
+  * **2025-04-21 更新 ："STP 方式 DECREMENT" 的具体启用日期尚未确定。**
+  * 通过不仅仅使挂单或吃单过期,或无条件地让两种订单都过期，STP 递减会减少**两种**订单的可用数量，并将通过阻止匹配的数量来增加**两种**订单的 `prevented quantity` 值。
+  * 这将使可用数量较少的order expiry，因为(`filled quantity` \+ `prevented quantity`)等于 `order quantity`。如果两个订单的可用数量相等，那么两个订单都将过期。这种情况被称为“递减”，因为可用数量减少了。
+* 使用 `orderId` 和 `origClientOrderId/cancelOrigClientOrderId` 来查询和/或取消订单：
+  * 以前，当两个参数都提供时，在各个端点的上行为并不一致。
+  * 以后，当同时提供两个参数时，系统首先将会使用订单的 `orderId` 来搜索订单。如果订单被找到， `origClientOrderId`/`cancelOrigClientOrderId` 的值将会被用来验证被找到的订单。如果两个检测条件都通过，那么请求成功。如果两个条件都不满足，则请求将被拒绝。
+  * 受影响的请求：
+    * REST API:
+      * `GET /api/v3/order`
+      * `DELETE /api/v3/order`
+      * `POST /api/v3/order/cancelReplace`
+    * WebSocket API:
+      * `order.status`
+      * `order.cancel`
+      * `order.cancelReplace`
+    * FIX API：
+      * OrderCancelRequest `<F>`
+      * OrderCancelRequestAndNewOrderSingle `<XCN>`
+* 使用 `listOrderId` 和 `listClientOrderId` 来取消订单:
+  * 以前，当两个参数都提供时，在各个端点的上行为并不一致。
+  * 以后，当同时提供两个参数时，系统首先将会使用 `listOrderId` 来搜索订单列表。如果找到相应的订单列表，`listClientOrderId` 将会被用来验证被找到的订单列表。如果两个条件都不满足，请求将被拒绝。
+  * 受影响的请求
+    * REST API
+      * `DELETE /api/v3/orderList`
+    * WebSocket API
+      * `orderList.cancel`
+* **SBE： 新模式 3:0 ([spot_3_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml)) 将可以使用。**
+  * 现行模式 2:1 ([spot_2_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_1.xml)) 将会被废止并根据我们的deprecation policy，在6个月内停止使用。
+  * 请Note:在新模式被发布前，尝试使用模式 3:0 将导致错误。
+  * 3:0 中的更改：
+    * 将会支持保留优先级的Updates订单（Order Amend Keep Priority）请求:
+      * 在 ExchangeInfoResponse 中添加了 `amendAllowed` field.
+      * new message `OrderAmendmentsResponse` 和 `OrderAmendKeepPriorityResponse`。
+    * 所有的枚举类型都有了新变量：`NON_REPRESENTABLE`。这将用于将来，对新的枚举值进行编码。新模式的枚举类型可能会与 3:0 不兼容。
+    * 新增针对 `selfTradePreventionMode` 和 `allowedSelfTradePreventionModes` 的new enum变量 `DECREMENT`。
+    * `symbolStatus` 枚举下的值 `AUCTION_MATCH`， `PRE_TRADING` 以及 `POST_TRADING` 已被删除。
+    * 字段 `usedSor`, `orderCapacity`， `workingFloor`，`preventedQuantity` 以及 `matchType` 将不再是可选的参数。
+    * 更改了 `ExecutionReportEvent`：现在，字段 `orderCreationTime` 是可选的。
+  * 通过 WebSocket API 来使用被废止的 2:1 版本的模式来侦听账户数据流：
+    * `ListStatusEvent` 的字段 `listStatusType` 在 `Updated` 时，会呈现为 `ExecStarted`。升级到模式 3:0 来获取正确的值。
+    * `ExecutionReportEvent` 的字段 `selfTradePreventionMode` 在 `Decrement` 时，会呈现为 `None`。 这将只在 `executionType` 为 `TradePrevention` 时发生。
+    * `ExecutionReportEvent` 的字段 `orderCreationTime` 在没有值时将呈现为 -1。
+  * 所有低于 3:0 版本的模式不会支持对保留优先级Updates订单请求（Order Amend Keep Priority）的响应，以及任何可能包含 STP 方式 `DECREMENT` 的响应（比如，Exchange Information，下单，取消订单或查询您的订单状态）。当响应无法用被指定的模式来表达时，系统将返回错误。
+
+---
+
+### 2025-04-03
+
+关注 SPOT 测试网的最新更新,将 WebSocket API 中的 URL 更新为 [SPOT Testnet] 的最新 URL(https://testnet.axvn.vn/).
+
+---
+
+### 2025-03-31
+
+* 添加了对取消订单性能的说明.
+
+---
+
+### 2025-03-10
+
+* **Note:following changes将于 2025 年 3 月 13 日 09:00 UTC 发生。**
+  * FIX Drop Copy 会话的限制将会为**每分钟 60 条消息**。
+  * FIX Market Data 会话的限制将会为**每分钟 2000 条消息**。
+  * FIX API documentation已更新，以反映即将发生的更改。
+* **SBE Market Data Streams将于 2025 年 3 月 18 日 07:00 UTC 上线。** 这些流会提供较小的有效负载，将为部分对延迟比较敏感的市场数据连接提供更快的响应时间。
+  * 以 SBE 格式提供的数据流：
+  * 实时：逐笔交易
+  * 实时：最优挂单信息
+    * 每 100 毫秒：增量深度信息
+  * 每 100 毫秒：有限档深度信息
+  * 有关更多信息，请参阅 [SBE 市场数据连流](sbe-market-data-streams_CN.md)。
+
+---
+
+### 2025-03-05
+
+* **Note:following changes将于 2025 年 3 月 10 日 12:00 UTC 发生。** <br>
+  以下请求权重将从 2 增加到 4：
+  * REST API: `GET /api/v3/aggTrade`
+  * WebSocket API: `trades.aggregate`
+* REST and WebSocket API 的文档均已更新，以反映即将发生的更改。
+
+---
+
+### 2025-02-12
+
+* **Note:这些更改将于 2025 年 2 月 26 日 05：00 UTC 生效。请确保在此之前您已下载最新的模式。
+* `AggressorSide （2446)` 将在 FIX Market Data Feed中提供。QuickFIX 模式 [file](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) 也已更新。
+
+---
+
+### 2024-01-28
+
+**注意: 该变更会在2025年2月3日到2025年2月14日之间逐步推出。**
+
+* **following changes将会同时应用于User Data Stream，WebSocket Market Data Streams 和 WebSocket API:**
+    * WebSocket 服务将会**每20秒**发送发送 PING 消息而不是每3分钟。
+    * PONG 消息的延迟将会是每1分钟而不是每10分钟。
+    * 相关服务的更改所corresponding文档都已经更新。
+
+---
+
+### 2025-01-09
+
+* FIX 市场数据将在 **January 16, 05:00 UTC** 提供。FIX API documentation已更新有关此功能。
+* 请参阅此 [链接](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) 以获取 FIX市场数据的 QuickFIX 模式。
+
+---
+
+### 2024-12-17
+
+常规更改：
+
+系统现在在所有相关时间和/或时间戳的字段中支持微秒。微秒支持是 **opt-in**，默认情况下，请求和响应仍然使用毫秒。文档中的示例也在可预见的将来使用毫秒。
+
+WebSocket Streams
+
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。
+  * 例如：`/stream？streams=btcusdt@trade&timeUnit=millisecond`
+  * 支持的值为：
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
+    * `microsecond`
+  * 如果未选择时间单位，则默认使用毫秒。
+
+REST API
+
+* 可以在请求中发送新的可选报文头 `X-MBX-TIME-UNIT` 来选择时间单位。
+  * 支持的值：
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
+    * `microsecond`
+  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。
+    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。
+  * 如果未选择时间单位，则默认使用毫秒。
+* 时间戳参数（例如 'startTime'、'endTime'、'timestamp）' 现在可以以毫秒或微秒为单位传递。
+
+WebSocket API
+
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。
+  * 支持的值：
+    * `MILLISECOND`
+    * `millisecond`
+    * `MICROSECOND`
+    * `microsecond`
+  * 时间单位会影响 JSON 响应中的时间戳字段（例如，`time`、`transactTime`）。
+    * 无论时间单位如何，SBE 响应都将继续以微秒为单位。
+  * 如果未选择时间单位，则默认使用毫秒。
+* 时间戳参数（例如 `startTime`、`endTime`、`timestamp`） 现在可以以毫秒或微秒为单位传递。
+
+User Data Streams
+
+* 可以在连接 URL 中使用新的可选参数 `timeUnit` 来选择时间单位。
+  * 支持的值
+    * `MILLISECOND`
+    * `MICROSECOND`
+    * `microsecond`
+    * `millisecond`
+
+---
+
+### 2024-12-09
+
+**Note:** 以下的变更会从**2024 年 12 月 12日**开始推出，可能需要大约一周的时间才能完成。
+
+常规更改：
+
+ * 现在会拒绝距离过去或未来太远的时间戳参数值。
+  * 时间戳数值在 2017 年 1 月 1 日之前（小于 1483228800000）
+  * 时间戳数值超过当前时间 10 秒以后（例如，如果当前时间为 1729745280000, 那么使用 1729745290000 或更大是错误的）
+* 如果 `startTime` 和/或 `endTime` 的值超出范围，数值会被调整至正确的范围。
+* 已将 `quote order quantity` （`origQuoteOrderQty`） 字段添加到原先没有该字段的响应中。请注意，对于下单相关的接口，该字段将仅针对 `newOrderRespType` 设置为 `RESULT` 或 `FULL` 的请求显示。
+
+请参阅以下列表，以便了解因带有： `origQuoteOrderQty` 而受影响的请求：
+
+
+| 服务 | 请求 |
+| :---- | :---- |
+| REST | `POST /api/v3/order`  |
+|  | `POST /api/v3/sor/order`  |
+|  | `POST /api/v3/order/oco`  |
+|  | `POST /api/v3/orderList/oco`  |
+|  | `POST /api/v3/orderList/oto`  |
+|  | `POST /api/v3/orderList/otoco`  |
+|  | `DELETE /api/v3/order`  |
+|  | `DELETE /api/v3/orderList`  |
+|  | `POST /api/v3/order/cancelReplace` |
+| WebSocket API | `order.place`  |
+|  | `sor.order.place`  |
+|  | `orderList.place`  |
+|  | `orderList.place.oco`  |
+|  | `orderList.place.oto`  |
+|  | `orderList.place.otoco`  |
+|  | `order.cancel`  |
+|  | `orderList.cancel`  |
+|  | `order.cancelReplace` |
+
+SBE
+
+* 已发布新模式 2:1 [spot_2_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_1.xml)。 当前模式 2:0 [spot_2_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml) 将被弃用。根据我们的模式deprecation policy，当前模式 2:0 会将在 6个月内从 API 中停用。
+* 模式 2：1 是 模式 2：0 的向后兼容更新版本。当您请求模式 2：0 或 2：1 时，您将始终收到 2：1 格式的有效载荷。
+* SBE 模式 2：1 中的更改：
+  * 下单/取消订单响应中的新字段 `origQuoteOrderQty` （Note:使用 2：0 模式生成的解码器将忽略此字段）：
+    * `NewOrderResultResponse`
+    * `NewOrderFullResponse`
+    * `CancelOrderResponse`
+    * `NewOrderListResultResponse`
+    * `NewOrderListFullResponse`
+    * `CancelOrderListResponse`
+  * WebSocket API only：会话状态响应中的新字段 `userDataStream`：
+    * `WebSocketSessionLogonResponse`
+    * `WebSocketSessionStatusResponse`
+    * `WebSocketSessionLogoutResponse`
+  * WebSocket API only：在 User Data Stream 中会支持的new message：
+    * `UserDataStreamSuaxvnscribeResponse`
+    * `UserDataStreamUnsuaxvnscribeResponse`
+    * `BalanceUpdateEvent`
+    * `EventStreamTerminatedEvent`
+    * `ExecutionReportEvent`
+    * `ExternalLockUpdateEvent`
+    * `ListStatusEvent`
+    * `OutboundAccountPositionEvent`
+
+WebSocket API
+
+* 您现在可以通过 WebSocket API 连接订阅账户数据流事件。
+  * 请Note:此功能仅适用于使用 Ed25519 API 密钥的用户。
+  * 请Note:如果您要订阅使用 SBE 格式的账户数据流，则需使用新的 SBE 模式 2:1。
+* 新请求：
+  * `userDataStream.suaxvnscribe`
+  * `userDataStream.unsuaxvnscribe`
+* 对于 `session.logon`、 `session.status` 和 `session.logout` 的更改。
+  * 添加了一个新字段 `userDataStream`，用于显示账户数据流订阅是否处于活跃状态。
+* 修复了在 `session.logon` 之后使用 `userDataStream.start` 不会收到新 listenKey 的错误。
+
+User Data Stream
+
+* 仅限于 WebSocket API:当您从 websocket 会话注销或取消订阅账户数据流时，新事件 `eventStreamTerminated` 将会被发出。
+* 当您的现货钱包余额被外部系统锁定/解锁时，新事件 `externalLockUpdate` 将会被发送。
+
+FIX API
+
+* [模式](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) 中已添加了新的管理消息 News \<B\>，该消息可用于所有 FIX 服务。收到此消息意味着您的连接即将关闭。
+
+following changes将在**2024 年 12 月 16 日到 2024 年 12 月 20日之间**发生：
+
+* 修复一个错误： `BUY` 方 OCO 单如果不提供 `stopPrice` 就会被阻止下单。
+* 在 OCO 中添加了对 `TAKE_PROFIT` 和 `TAKE_PROFIT_LIMIT` 的支持。
+  * 以前，OCO 只能由以下订单类型组成：
+    * `LIMIT_MAKER` + '`STOP_LOSS`
+    * `LIMIT_MAKER` + `STOP_LOSS_LIMIT`
+  * 现在，OCO 可以由以下订单类型组成：
+    * `LIMIT_MAKER` + `STOP_LOSS`
+    * `LIMIT_MAKER` + `STOP_LOSS_LIMIT`
+    * `TAKE_PROFIT` + `STOP_LOSS`
+    * `TAKE_PROFIT` + `STOP_LOSS_LIMIT`
+    * `TAKE_PROFIT_LIMIT` + `STOP_LOSS`
+    * `TAKE_PROFIT_LIMIT` + `STOP_LOSS_LIMIT`
+  * 以下请求支持此功能：
+    * `POST /api/v3/orderList/oco`
+    * `POST /api/v3/orderList/otoco`
+    * `orderList.place.oco`
+    * `orderList.place.otoco`
+    * `NewOrderList<E>`
+  * 错误代码 -1167 将在此次更新后过时，并将在以后的更新中从文档中删除。
+
+---
+
+### 2024-10-18
+
+Rest 和 WebSocket API:
+
+* Note:根据我们的 SBE 政策，SBE 1：0 模式将于 2024 年 10 月 25 日被禁用 [废止后 6 个月](./faqs/sbe_faq_CN.md)。
+* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+
+---
+
+### 2024-10-17
+
+Exchange Information 的更改 （即 REST API 的 [`GET /api/v3/exchangeInfo`](rest-api_CN.md#exchangeInfo) 和 WebSocket API 的 [`exchangeInfo`](web-socket-api_CN.md#exchangeInfo)）。
+
+* 新的可选参数 `showPermissionSets` 可用于隐藏 `permissionsSets` 的权限信息;这可用于减小消息大小。
+* 新的可选参数 `symbolStatus` 用于仅显示具有指定状态的trading pair。（例如：`TRADING`， `HALT`， `BREAK`）
+
+
+---
+
+### 2024-08-26
+
+* [现货未成交订单计数规则](./faqs/order_count_decrement_CN.md)  已更新，解释了如何在下订单时减少未成交的订单数量。
+
+---
+### 2024-08-16
+
+**Note:** 以下的变更正在逐步推出，可能需要大约一周的时间才能完成。
+
+常规更改：
+* 在市场流动性低的情况下，当提交包含 `quoteOrderQty` 的市价单（又名反向市价单）被拒绝时，添加了新的错误消息。
+
+
+---
+
+### 2024-08-01
+
+* [FIX API 和 Drop Copy 会话](fix-api_CN.md) 将于 **8 月 8 日 05:00 UTC** 上线。
+
+---
+
+### 2024-07-26
+
+* [FIX API 和 Drop Copy 会话](fix-api_CN.md) 已添加到文档中。
+* 实时交换的发布日期尚未确定。
+
+---
+
+### 2024-07-22
+
+常规更改：
+
+* 修复了 klines 的时间戳不正确的 bug。
+  * REST API: 带有 `timeZone` 参数的 `GET /api/v3/klines` 和 `GET /api/v3/uiKlines`
+  * WebSocket API: 带有 `timeZone` 参数的 `klines` 和 `uiKlines`
+  * WebSocket Streams: `<symbol>@kline_<interval>@+08：00`
+
+---
+
+### 2024-06-11
+
+* 在 **6月11日 UTC 时间 05:00**，我们将开始推出新功能 `One-Triggers-the-Other` (OTO) 订单和 `One-Triggers-a-One-Cancels-The-Other` (OTOCO) 订单。（请注意，我们可能需要花几个小时来部署到所有服务器。）
+    * 有关详细信息，请参阅以下页面：
+        * REST API:
+            * `POST /api/v3/orderList/oto`
+            * `POST /api/v3/orderList/otoco`
+        * WebSocket API:
+            * `orderList.place.oto`
+            * `orderList.place.otoco`
+* 在 **6月18日 UTC 时间 05:00**，我们将会把买方的订单 ID（`b`） 和卖方的订单 ID（`a`） 从交易流中删除（i.e. `<symbol>@trade`）。 （请注意，我们可能需要花几个小时来部署到所有服务器。）
+    * [WebSocket Market Data Streams](web-socket-streams_CN.md) 与其相关的文档已经被更改了。
+    * 要监控您的订单是否是交易的一部分，请订阅 [User Data Stream](user-data-stream_CN.md)。
+
+---
+
+### 2024-06-06
+
+此功能将在**6月6日 UTC时间11:59**前上线。
+
+REST API
+
+* `POST /api/v3/order/cancelReplace` 新加可选参数 `orderRateLimitExceededMode`。
+
+WebSocket API
+
+* `order.cancelReplace` 新加可选参数 `orderRateLimitExceededMode`。
+
+---
+
+### 2024-05-30
+
+WebSocket Streams
+
+* Kline 新增加了对 UTC+8 时区的支持。（例如，`btcusdt@kline_1d@+08:00`）
+
+---
+
+### 2024-04-10
+
+以下更新的生效时间已被推迟到 **4月25日 05：00 UTC**
+
+* "交易规范信息"响应中的trading pair权限信息has been removed from字段 `permissions` 移至字段 `permissionSets`。
+* 字段 `permissions` 将为空，并将在未来版本中删除。
+* 以前，`"permissions":["SPOT","MARGIN"]` 代表如果您的账户具有 `SPOT` 或 `MARGIN` 权限，您就可以在该trading pair上下订单。现在，等效项是 `"permissionSets":[["SPOT","MARGIN"]]`（请注意额外的方括号）。`permissionSets`数组中的每个权限数组称为 "permission set"。
+* trading pair的权限现在可以有更多权限类型。例如，`"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` 指示除了支持以上提过的权限集，也接受 `TRD_GRP_004` 或 `TRD_GRP_005`。trading pair的 `permissionSets` 中可以有任意排列组合的权限集。
+
+REST API
+
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+WebSocket API
+
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+SBE
+
+* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式deprecation policy，会将在 6 个月内下线。
+* 在 REST API 或 WebSocket API 上使用模式 1:0 时，消息 `ExchangeInfoResponse` 中的组"权限"将始终为空。在升级到模式 2:0后， 您才可以在 `permissionSets` 组中查找权限信息。
+* 最新模式仍将支持is deprecated的 OCO 请求。
+* 请注意，在模式 2:0 实际发布之前尝试使用它会导致错误。
+
+---
+
+### 2024-04-02
+
+**Note:** 以下的变更将逐步推出，并预计需要大约一周的时间完成。
+
+* `GET /api/v3/account` 新加可选参数 `omitZeroBalances`，如果启用，则会隐藏所有零余额。
+* `account.status` 新加可选参数 `omitZeroBalances`，如果启用，则会隐藏所有零余额。
+* **以下请求的权重has been removed from 10 增加到 25 （该规定将于2024年4月4日生效）**：
+    * `GET /api/v3/trades`
+    * `GET /api/v3/historicalTrades`
+    * `trades.recent`
+    * `trades.historical`
+
+User Data Stream
+
+* 如果 `listenKey` 过期，将在流中发出新事件 `listenKeyExpired`。
+
+REST API
+
+* REST API 上现is deprecated `POST /api/v3/order/oco` 接口。从今开始，请使用新的 `POST /api/v3/orderList/oco` 接口（请注意，新接口使用不同的参数）。
+
+WebSocket API
+
+* WebSocket API 上现is deprecated `orderList.place` 请求。从今开始，请使用新的 `orderList.place.oco` 请求（请注意，新接口使用不同的参数）。
+
+
+**以下内容将于发布日期 _大约_ 一周后生效：**
+
+* "交易规范信息"响应中的trading pair权限信息has been removed from字段 `permissions` 移至字段 `permissionSets`。
+* 字段 `permissions` 将为空，并将在未来版本中删除。
+* 以前，`"permissions":["SPOT","MARGIN"]` 代表如果您的账户具有 `SPOT` 或 `MARGIN` 权限，您就可以在该trading pair上下订单。现在，等效项是 `"permissionSets":[["SPOT","MARGIN"]]`（请注意额外的方括号）。`permissionSets`数组中的每个权限数组称为 "permission set"。
+* trading pair的权限现在可以有更多权限类型。例如，`"permissionSets":[["SPOT","MARGIN"],["TRD_GRP_004","TRD_GRP_005"]]` 指示除了支持以上提过的权限集，也接受 `TRD_GRP_004` 或 `TRD_GRP_005`。trading pair的 `permissionSets` 中可以有任意排列组合的权限集。
+
+REST API
+
+* `otoAllowed` 现在将出现在 `GET /api/v3/exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+WebSocket API
+
+* `otoAllowed` 现在将出现在 `exchangeInfo` 上，指示该交易品种是否支持 One-Triggers-the-Other (OTO) 订单。
+
+
+SBE
+
+* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式deprecation policy，会将在 6 个月内下线。
+* 在 REST API 或 WebSocket API 上使用模式 1:0 时，消息 `ExchangeInfoResponse` 中的组"权限"将始终为空。在升级到模式 2:0后， 您才可以在 `permissionSets` 组中查找权限信息。
+* 最新模式仍将支持is deprecated的 OCO 请求。
+* 请注意，在模式 2:0 实际发布之前尝试使用它会导致错误。
+
+### 2024-02-28
+
+**将于 2024 年 3 月 5 日生效。**
+
+简单二进制编码 (SBE) 将部署到现货的 Rest API 和  WebSocket API 生产系统上。
+
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_CN.md)
+
+---
+
+### 2024-02-08
+
+现货的 WebSocket API 现在在[测试网](https://testnet.axvn.vn)上支持简单二进制编码(SBE)。
+
+SBE 模式已经Updated WebSocket API 元数据，但并没有增加 `schemaId` 或者 `version`。
+
+* 仅在 REST API 上使用 SBE 的用户可以继续使用 SBE 模式 [`128b94b2591944a536ae427626b795000100cf1d`](https://github.com/alisababivip/axvn-docs-api/blob/128b94b2591944a536ae427626b795000100cf1d/sbe/schemas/spot_1_0.xml)，或者更新到新提交的 SBE 模式。
+
+* 希望在 WebSocket API 上使用 SBE 的用户，需要更新到[最新的 SBE 模式](https://github.com/alisababivip/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml)。
+
+SBE 的 [FAQ](./faqs/sbe_faq_CN.md) 已经更新。
+
+---
+
+### 2023-12-08
+
+简单二进制编码 (SBE) 已经在[现货测试网](https://testnet.axvn.vn)上线。
+生产系统会在随后支持。
+更多关于SBE的信息, 请参考[常见问题解答 (FAQ)](./faqs/sbe_faq_CN.md)
+
+---
+
+### 2023-12-04
+
+**注意**： 以下的变更将逐步推出，并预计需要大约一周的时间完成。
+
+* 错误消息 `Precision is over the maximum defined for this asset.` 被改为 `Parameter '%s' has too much precision.`
+    * 当参数的精度超出允许范围时，将返回此错误消息。例如，如果基础资产（`base asset`）精度为6，但是设置`quantity=0.1234567`，则会出现此错误消息。
+    * 这会影响所有具有以下参数的请求:
+        * `quantity`
+        * `quoteOrderQty`
+        * `icebergQty`
+        * `limitIcebergQty`
+        * `stopIcebergQty`
+        * `price`
+        * `stopPrice`
+        * `stopLimitPrice`
+* 现在，请求查询OCO开单时会正确返回**升序**的结果。这会影响以下请求：
+    * REST API: `GET /api/v3/openOrderList`
+    * WebSocket API: `openOrderList.status`
+* 现在，当指定`startTime`或`fromId`时，请求查询所有 OCO 订单会正确返回**升序**的结果。这会影响以下请求：
+    * REST API: `GET /api/v3/allOrderList`
+    * WebSocket API: `allOrderLists`
+* 修复了一个错误。订单查询请求不再会对新下的订单错误返回[`-2026 ORDER_ARCHIVED`](./errors_CN.md#-2026-order_archived)错误。
+    * REST API: `GET /api/v3/order`
+    * WebSocket API: `order.status`
+
+
+REST API
+
+* 新接口 `GET /api/v3/account/commission`
+* 新接口 `GET /api/v3/ticker/tradingDay`
+* `GET /api/v3/avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
+* `GET /api/v3/klines` 和 `/api/v3/uiKlines` 新加可选参数 `timeZone`。
+* `POST /api/v3/order/test` 和 `POST /api/v3/sor/order/test` 新加可选参数 `computeCommissionRates`。
+* 关于发送无效接口的变动：
+    * 以前，如果查询一个不存在的端点（例如 `curl -X GET "https://api.axvn.vn/api/v3/exchangie"`），你会收到 HTTP 404 状态码，以及响应 "`<html><body><h2>404 Not found</h2></body></html>`"。
+    * 从现在开始，只有当接受请求头中包含`text/html`时，HTML响应才会出现在这种情况下。HTTP状态码将保持不变。
+
+WebSocket API
+
+* 新请求 `account.commission`
+* 新增请求以允许会话身份验证: **(请注意，这些请求只能使用Ed25519密钥。)**
+    * `session.logon`
+    * `session.logout`
+    * `session.status`
+* 新请求 `ticker.tradingDay`
+* 方法 `avgPrice` 新加字段 `closeTime`, 用于显示最后交易时间。
+* 方法 `klines` 和 `uiKlines` 新加可选参数 `timeZone`。
+* 方法 `order.test` 和 `sor.order.test` 新加可选参数 `computeCommissionRates`.
+* 修复了一个错误。之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
+
+WebSocket Streams
+
+* 新数据流 `<symbol>@avgPrice`
+* 请求中的`id`现在支持和 WebSocket API 里`id`一样的值:
+    * 64位有符号整数 (之前是无符号整数)
+    * 字母数字字符串；最大长度36
+    * `null`
+* 修复了一个错误，之前在发送 ping 之前未经请求发送的 pongs 会导致断开连接。
+
+User Data Streams
+
+* 当事件类型为 `executionReport`，而执行类型（x）为`TRADE_PREVENTION`时，字段`l`、`L`和`Y`现在将始终为0。new field added`pl`、`pL`和`pY`将描述被阻止执行的数量、被阻止执行的价格和被阻止执行的名义金额。这些新字段显示了如果接收方订单没有启用自成交防止功能时，`l`、`L`和`Y`会是什么值。
+
+
+**以下将在发布日期后_大约_一周后生效:**
+
+* trading pair权限将仅影响下单，而不影响取消订单。
+    * `permissions`仍然适用于撤消挂单再下单（Cancel-Replace orders）（比如，如果您的账户有使用此请求下单的权限，则将不允许取消操作）。
+
+
+---
+
+### 2023-10-19
+
+**从 2023-10-19 00:00 UTC 开始生效**
+
+* 调高如下接口的请求权重:
+
+<table>
+    <tr>
+        <th>REST API</th>
+        <th>WebSocket API</th>
+        <th>条件 </th>
+        <th>之前的权重</th>
+        <th>调整后权重</th>
+    </tr>
+    <tr>
+        <td width="200px"><code>GET /api/v3/trades</code></td>
+        <td><code>trades.recent</code></td>
+        <td>N/A</td>
+        <td>2</td>
+        <td>10</td>
+    </tr>
+    <tr >
+       <td rowspan="4"><code>GET /api/v3/depth</code></td>
+       <td rowspan="4"><code>depth</code></td>
+       <td><b>Limit 1-100</b></td>
+       <td>2</td>
+       <td>5</td>
+    </tr>
+    <tr>
+        <td width="100px"><b>Limit 101-500</b></td>
+        <td>10</td>
+        <td>25</td>
+    </tr>
+    <tr>
+        <td><b>Limit 501-1000</b></td>
+        <td>20</td>
+        <td>50</td>
+    </tr>
+    <tr>
+        <td><b>Limit 1001-5000</b></td>
+        <td>100</td>
+        <td>250</td>
+    </tr>
+</table>
+
+
+---
+
+### 2023-10-03
+
+* **下单量的退回(`Order decrement`)功能在 06:15 UTC上线.**
+* 此功能的更详细信息, 请参考 [FAQ](./faqs/order_count_decrement_CN.md)
+
+---
+
+### 2023-08-25
+
+* Websocket API 的 `exchangeInfo` 中的 `RAW REQUESTS` 被移除，新增了用于表示WebSocket连接数限制的 `CONNECTIONS`。
+
+**下面的变更会在UTC时间 2023-08-25 00:00 上线**
+* WebSocket API 的 `CONNECTIONS` 被调整为每5分钟300。
+* REST API 和 WebSocket API 的 `REQUEST_WEIGHT` 调整为每分钟6,000。
+* REST API 中的 `RAW_REQUESTS` 调整为每5分钟61,000。
+* 之前连接到 WebSocket API 的权重为1。**现权重调整到 2**。
+* 下表的 REST API 和 WebSocket API 请求的权重被调整:
+
+|请求接口|之前请求权重| 新请求权重|
+|----   |----                   | ----                   |
+|`GET /api/v3/order` <br> `order.status` |2 | 4|
+|`GET /api/v3/orderList` <br> orderList.status| 2|4|
+|`GET /api/v3/openOrders` <br> `openOrders.status` - **带 `symbol`**|3|6|
+|`GET /api/v3/openOrders` <br> `openOrders.status` - **不带 `symbol`**|40|80|
+|`GET /api/v3/openOrderList` <br>`openOrderLists.status`|3|6|
+|`GET /api/v3/allOrders` <br>`allOrders`  |10|20
+|`GET /api/v3/allOrderList` <br> `allOrderLists` |10|20
+|`GET /api/v3/myTrades`  <br> `myTrades`|10|20|
+|`GET /api/v3/myAllocations`  <br> `myAllocations` |10|20|
+|`GET /api/v3/myPreventedMatches`  <br> `myPreventedMatches`  - **使用 `preventedMatchId`** | 1 | 2
+|`GET /api/v3/myPreventedMatches`  <br> `myPreventedMatches`  - **使用 `orderId`**|10|20|
+|`GET /api/v3/account` <br> `account.status` |10 |20|
+|`GET /api/v3/rateLimit/order` <br> `account.rateLimits.orders`|20|40|
+|`GET /api/v3/exchangeInfo` <br> `exchangeInfo`|10|20|
+|`GET /api/v3/depth`<br> `depth`  - **Limit 1-100**|1|2|
+|`GET /api/v3/depth` <br> `depth` - **Limit 101-500**|5|10|
+|`GET /api/v3/depth` <br>`depth`  - **Limit 501-1000**|10|20|
+|`GET /api/v3/depth` <br> `depth`  - **Limit 1001-5000**|50|100|
+|`GET /api/v3/aggTrades`  <br> `trades.aggregate` |1|2|
+|`GET /api/v3/trades` <br> `trades.recent`  |1|2|
+|`GET /api/v3/historicalTrades`  <br> `trades.historical` |5|10|
+|`GET /api/v3/klines` <br> `klines`  |1|2|
+|`GET /api/v3/uiKlines` <br> `uiKlines` |1|2|
+|`GET /api/v3/ticker/bookTicker` <br> `ticker.book` - **带 `symbol`**|1|2|
+|`GET /api/v3/ticker/bookTicker` <br> `ticker.book` - **不带 `symbol`** 或者 **带 `symbols`**|2|4|
+|`GET /api/v3/ticker/price`<br> `ticker.price` - **带 `symbol`**|1|2|
+|`GET /api/v3/ticker/price`<br> `ticker.price` - **不带 `symbol`** 或者 **带 `symbols`**|2|4|
+|`GET /api/v3/ticker/24hr` <br> `ticker.24hr` - **带 `symbol`** 或者 ** `symbols` 带 1-20 trading pair** |1|2|
+|`GET /api/v3/ticker/24hr` <br> `ticker.24hr` - **带 `symbols` 21-100 trading pair**|20|40|
+|`GET /api/v3/ticker/24hr` <br> `ticker.24hr` - **不带 `symbol` 或者 `symbols` 带 101 个或者更多trading pair**|40|80|
+|`GET /api/v3/avgPrice` <br>`avgPrice`|1|2|
+|`GET /api/v3/ticker` <br> `ticker`|2|4|
+|`GET /api/v3/ticker` <br> `ticker` - 请求的最大权重|100|200|
+|`POST /api/v3/userDataStream` <br> `userDataStream.start`|1|2|
+|`PUT /api/v3/userDataStream` <br> `userDataStream.ping`|1|2|
+|`DELETE /api/v3/userDataStream`<br> `userDataStream.stop`|1|2|
+
+---
+
+### 2023-08-08
+
+智能订单路由(Smart Order Routing：SOR）添加到 API 中。您可以在[SOR 常见问题](./faqs/sor_faq_CN.md) 文档中找到更多详细信息。具体上线时间请关注相关公告。
+
+REST API
+
+* `GET /api/v3/exchangeInfo` 变动：
+    * 返回数据中添加新字段: `sors`, 用于描述交易中是否使用了 SOR。
+* `GET /api/v3/myPreventedMatches` 变动：
+    * 对于所有的 Prevented Matches， 返回数据中添加新字段 `makerSymbol` 。
+* 为了在下单时使用 SOR 而添加的新接口：
+    * `POST /api/v3/sor/order`
+    * `POST /api/v3/sor/order/test`
+* 添加新接口: `GET /api/v3/myAllocations`
+
+WEBSOCKET API
+
+* `exchangeInfo` 变动：
+    *  返回数据中添加新字段: `sors` , 用于描述交易中是否使用了 SOR。
+* `myPreventedMatches` 变动：
+    * 对于所有的 Prevented Matches， 返回数据中添加新字段 `makerSymbol`。
+* 为了在下单时使用 SOR 而添加的新请求：
+    * `sor.order.place`
+    * `sor.order.test`
+* 添加新请求 `myAllocations`
+
+USER DATA STREAM
+
+* `executionReport` 变动：
+    * 以下这些字段只适用于下单时使用 SOR 的情况：
+        * 新字段 `b` 代表 `matchType`
+        * 新字段 `a` 代表 `allocId`
+        * 新字段 `k` 代表 `workingFloor`
+    * 这个字段只适用于订单因为触发 STP 而将过期的情况：
+        * 新字段 `Cs` 代表 `counterSymbol`
+
+---
+
+### 2023-07-18
+
+* 现在支持使用 Ed25519 类型的 API key。(UI 会在本周发布更新支持)
+    * Ed25519 API keys 是 RSA API keys 的替代品，使用非对称加密技术来验证您的 API 请求。
+    * **我们建议切换到 Ed25519** 以提高性能和安全性。 <br>
+        详情请参考[API Key 类型](./faqs/api_key_types_CN.md)。
+* 文档已更新，包括了有关如何使用 Ed25519 key 对有效载荷进行签名的说明。
+
+---
+
+### 2023-07-11
+
+**注意:** 所有更改都将逐步推出，可能需要一周时间才能完成。
+
+* 错误消息的变动:
+    * 之前当发送重复trading pair时，会返回错误信息: "Mandatory parameter symbols was not sent, was empty/null, or malformed."
+    * 现在则返回消息: "Symbol is present multiple times in the list", with a new error code `-1151`
+    * 受影响的接口:
+        * `GET /api/v3/exchangeInfo`
+        * `GET /api/v3/ticker/24hr`
+        * `GET /api/v3/ticker/price`
+        * `GET/api/v3/ticker/bookTicker`
+        * `exchangeInfo`
+        * `ticker.24hr`
+        * `ticker.price`
+        * `ticker.book`
+* 修复一个bug，当查询没有被存档的订单时候，可能返回错误消息称已经被存档。
+
+Rest API
+
+* `GET /api/v3/account` 变动：
+    * 返回数据中添加新字段 `preventSor`。
+    * 返回数据中添加用户ID的新字段 `uid`。
+* `GET /api/v3/historicalTrades` 变动：
+    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`。
+    * 不需要设置 `X-MBX-APIKEY` 到请求的header中。
+
+Websocket API
+
+* `account.status` 变动：
+    * 返回数据中添加新字段 `preventSor`。
+    * 返回数据中添加用户ID的新字段 `uid`。
+* `trades.historical` 变动：
+    * 鉴权类型从 `MARKET_DATA` 变更为 `NONE`。
+    * 请求中不需要设置 `apiKey`。
+
+* Updates了几个bugs: 当下单时设置 `type=MARKET` 和 `quoteOrderQty`, 也被称为"反向市价单":
+    * 当处于极端市场情况下, 订单不会返回部分成交，或者成交的数量为0甚至是负数。
+    * 当这种反向市价单的成交数量超过trading pair的 `maxQty`, 订单会因为违反`MARKET_LOT_SIZE` 过滤器而被拒绝。
+* 修复一个OCO订单的bug: 当使用 `trailingDelta` 时候, 当任何leg被触发时, `trailingTime` 值可能不正确。
+* 这些接口的返回数据中添加新字段 `transactTime` :
+    * `DELETE /api/v3/order`
+    * `POST /api/v3/order/cancelReplace`
+    * `DELETE /api/v3/openOrders`
+    * `DELETE /api/v3/orderList`
+    * `order.cancel`
+    * `order.cancelReplace`
+    * `openOrders.cancelAll`
+    * `orderList.cancel`
+
+
+---
+
+### 2023-06-06
+
+* 为了提供系统的冗余能力，新加一个API接入网址: **https://api-gcp.axvn.vn/**
+    * 此网址利用了 GCP (Google Cloud Platform) 的CDN，可能在性能上比`api1`-`api4`要慢。
+
+---
+
+### 2023-05-26
+
+**注意:** 所有更改都将逐步推出到我们的所有服务器，并可能需要一周时间才能完成。
+* 以下基本接口可能会提供比 **https://api.axvn.vn** 更好的性能但其稳定性略为逊色:
+  * **https://api1.axvn.vn**
+  * **https://api2.axvn.vn**
+  * **https://api3.axvn.vn**
+  * **https://api4.axvn.vn**
+
+---
+
+### 2023-05-24
+
+* **以前的市场数据 URL 已不建议使用。请立即更新您的代码，以防止来自我们的服务被中断**
+    * 来自 `data.axvn.vn` 的 API 市场数据现在可以从 `data-api.axvn.vn` 访问。
+    * 来自 `data-stream.axvn.vn` 的 Websocket 市场数据现在可以从 `data-stream.axvn.vn` 访问。
+
+---
+
+### 2023-03-13
+
+**注意:** 所有更改都将逐步推出到我们的所有服务器，并可能需要一周时间才能完成。
+
+* 某些问题的错误消息已经改进，以便更轻松地进行解决。
+
+<table>
+    <tr>
+        <th>情况</th>
+        <th>之前的错误消息</th>
+        <th>新错误消息</th>
+    </tr>
+    <tr>
+        <td>由于交易权限被禁用，账户无法下订单或取消订单。</td>
+        <td rowspan="3">This action is disabled on this account.</td>
+        <td>This account may not place or cancel orders.</td>
+    </tr>
+    <tr>
+        <td>当配置在trading pair上的权限与账户上的权限不匹配时。</td>
+        <td>This symbol is not permitted for this account.</td>
+    </tr>
+    <tr>
+        <td>当账户在其没有权限的trading pair上下订单时。</td>
+        <td>This symbol is restricted for this account.</td>
+    </tr>
+    <tr>
+        <td>当 <tt>symbol</tt> 不在 <tt>TRADING</tt> 时下订单。</td>
+        <td rowspan="2">Unsupported order combination.</td>
+        <td>This order type is not possible in this trading phase.</td>
+    </tr>
+    <tr>
+        <td>在不支持 <tt>IOC</tt> 或 <tt>FOK</tt> 的交易阶段上使用 <tt>timeinForce</tt> = <tt>IOC</tt> 或 <tt>FOK</tt> 下订单时。</td>
+        <td>Limit orders require GTC for this phase.</td>
+    </tr>
+</table>
+
+* Corrected查询归档订单的错误消息：
+    * 之前，如果查询了一个归档订单（即状态为 `CANCELED` 或 `EXPIRED`，`executedQty` == 0 而且最后的更新在 90 天以前），错误消息将是：
+    ```json
+    {
+        "code": -2013,
+        "msg": "Order does not exist."
+    }
+    ```
+    * 现在，错误消息为：
+    ```json
+    {
+        "code": -2026,
+        "msg": "Order was canceled or expired with no executed qty over 90 days ago and has been archived."
+    }
+    ```
+* API 请求使用 `startTime` 和 `endTime` 的行为：
+    * 之前，如果 `startTime` == `endTime`，一些请求会失败。
+    * 现在，所有接受 `startTime` 和 `endTime` 的 API 请求会允许这些参数相等。这适用于以下接口：
+        * Rest API
+            * `GET /api/v3/aggTrades`
+            * `GET /api/v3/klines`
+            * `GET /api/v3/allOrderList`
+            * `GET /api/v3/allOrders`
+            * `GET /api/v3/myTrades`
+        * Websocket API
+            * `trades.aggregate`
+            * `klines`
+            * `allOrderList`
+            * `allOrders`
+            * `myTrades`
+
+* 如果用户的IP地址因违反 IP 速率限制（状态码为 `418`）而被禁止，那么连接到 WebSocket API 的用户将被断开连接。
+
+虽然following changes将在发布日期后 **大约一周内生效**，但是与其相关的文档已经被更改了：
+
+* 过滤器评估的更改：
+    * 之前的行为: `LOT_SIZE` 和 `MARKET_LOT_SIZE` 要求 (`quantity` - `minQty`) % `stepSize` == 0。
+    * 新行为: 现在已更改为 (`quantity` % `stepSize`) == 0。
+* 使用 `quoteOrderQty` 的 `MARKET`订单的错误修复：
+    * 之前的行为: 订单的状态将始终为 `FILLED`，即使订单没有完全成交。
+    * 新行为: 如果订单由于流动性不足而没有完全成交，则订单状态将为 `EXPIRED`，仅当订单完全成交时状态为 `FILLED`。
+
+REST API
+
+* `DELETE /api/v3/order` 和 `POST /api/v3/order/cancelReplace` 的更改:
+    * 新的可选参数 `cancelRestrictions`，该参数用于决定是否能成功取消状态为 `NEW` 或 `PARTIALLY_FILLED` 的订单。
+    * 如果由于 `cancelRestrictions` 而取消订单失败，错误将是：
+    ```json
+    {
+        "code": -2011,
+        "msg": "Order was not canceled due to cancel restrictions."
+    }
+    ```
+
+WEBSOCKET API
+
+* `order.cancel` 和 `order.cancelReplace` 的更改:
+    * 新的可选参数 `cancelRestrictions`，该参数用于决定是否能成功取消状态为 `NEW` 或 `PARTIALLY_FILLED` 的订单。
+    * 如果由于 `cancelRestrictions` 而取消订单失败，错误将是：
+    ```json
+    {
+        "code": -2011,
+        "msg": "Order was not canceled due to cancel restrictions."
+    }
+    ```
+
+---
+
+### 2023-02-17
+
+**WebSocket频率限制变动**
+
+`WS-API` 和 `Websocket Stream` 现在限制每个IP地址、每5分钟可以发送连接请求的上限是300次。
+
+
+---
+
+### 2023-01-26
+
+根据此[公告](https://www.axvn.vn/zh-CN/support/announcement/%E5%B9%A3%E5%AE%89%E7%8F%BE%E8%B2%A8%E6%8E%A8%E5%87%BAapi%E8%87%AA%E6%88%90%E4%BA%A4%E9%A0%90%E9%98%B2-stp-%E5%8A%9F%E8%83%BD-312fd0112fb44635b397c116e56d8f84)，Self-Trade Prevention 将在 **2023-01-26 08:00 UTC** 发布。
+
+---
+
+### 2023-01-23
+
+* 添加了新的 API 集群 https://api4.axvn.vn
+
+---
+
+### 2023-01-19
+
+实际发布日期待定
+
+**新功能**：Self-Trade Prevention（STP）会添加到系统中。此功能将阻止订单与来自同一账户或者同一 `tradeGroupId` 账户的订单交易。
+
+请使用现货 REST API 的 `GET /api/v3/exchangeInfo` 或 Websocket API 的 `exchangeInfo` 看 STP 的状态。
+
+```javascript
+{
+    "defaultSelfTradePreventionMode": "NONE",     // selfTradePreventionMode 的默认值
+    "allowedSelfTradePreventionModes": [          // selfTradePrevention 的可用模式
+        "NONE",
+        "EXPIRE_TAKER",
+        "EXPIRE_BOTH",
+        "EXPIRE_MAKER"
+    ]
+}
+```
+
+在[STP 常见问题](./faqs/stp_faq_CN.md) 文档中可以找到更多其它关于 STP 功能的详细信息。
+
+REST API
+
+* 新的订单状态：`EXPIRED_IN_MATCH` - 订单由于 STP 触发而过期。
+* 新的接口：
+   * `GET /api/v3/myPreventedMatches` - 获取由于 STP 触发而过期的订单。
+* 新的可选参数 `selfTradePreventionMode` 已添加到以下的接口：
+    * `POST /api/v3/order`
+    * `POST /api/v3/order/oco`
+    * `POST /api/v3/cancelReplace`
+* 如果有预防自我交易(Prevented Match)，所有下单相关的接口会出现新字段：
+    * `tradeGroupId`      - 仅当账户配置为 `tradeGroupId` 时才会出现。
+    * `preventedQuantity` - 被防止交易的订单数量。
+    * `preventedMatches` 数组会有以下的字段：
+        * `preventedMatchId`
+        * `makerOrderId`
+        * `price`
+        * `takerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_TAKER` 或 `EXPIRE_BOTH` 时才会出现。
+        * `makerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_MAKER` 或 `EXPIRE_BOTH` 时才会出现。
+* 如果订单因 STP 触发而过期，以下查询订单接口的响应中可以出现新的字段 `preventedMatchId` 和 `preventedQuantity`：
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+
+WEBSOCKET API
+
+* 新的订单状态：`EXPIRED_IN_MATCH` - 订单由于 STP 触发而过期。
+* 新的请求：`myPreventedMatches` - 获取由于 STP 触发而过期的订单。
+* 新的可选参数 `selfTradePreventionMode` 已添加到以下的请求：
+    * `order.place`
+    * `orderList.place`
+    * `order.cancelReplace`
+* 如果有防止自我交易，将为所有下订单的请求会出现的新响应：
+    * `tradeGroupId`      - 仅当账户配置为 `tradeGroupId` 时才会出现。
+    * `preventedQuantity` - 被防止交易的订单数量。
+    * `preventedMatches` 数组会有以下的字段：
+        * `preventedMatchId`
+        * `makerOrderId`
+        * `price`
+        * `takerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_TAKER` 或 `EXPIRE_BOTH` 时才会出现。
+        * `makerPreventedQuantity` - 仅当 `selfTradePreventionMode` 设置为 `EXPIRE_MAKER` 或 `EXPIRE_BOTH` 时才会出现。
+* 如果订单因 STP 触发而过期，以下查询订单接口的响应中可以出现新的字段 `preventedMatchId` 和 `preventedQuantity`：
+    * `order.status`
+    * `openOrders.status`
+    * `allOrders`
+
+
+USER DATA STREAM
+
+* 新的执行类型：`TRADE_PREVENTION`。
+* `executionReport` 的新字段（这些字段只会在订单因 STP 触发而过期时出现）：
+    * `u` - `tradeGroupId`
+    * `v` - `preventedMatchId`
+    * `U` - `counterOrderId`
+    * `A` - `preventedQuantity`
+    * `B` - `lastPreventedQuantity`
+
+---
+
+### 2022-12-28
+
+* 现货 WebSocket API 文档已更新，添加了如何使用 RSA key 签署请求。
+
+---
+
+### 2022-12-26
+
+* 现货的 Websocket API 发布到生产系统中。
+* 现货的 Websocket API 可以通过URL: `wss://ws-api.axvn.vn/ws-api/v3` 来访问。
+
+---
+
+### 2022-12-15
+
+* 添加新的RSA签名验证方式
+    * 文档已更新以显示如何创建 RSA keys。
+    * 建议在生成 API key 时使用 RSA keys。
+    * 我们接受`PKCS#8`（BEGIN PUBLIC KEY）。
+    * 稍后将添加有关如何上传 RSA public key 的更多详细信息。
+* 现货 WebSocket API 现在可以在 SPOT 测试网上使用。
+    * WebSocket API 允许通过 WebSocket 连接下订单、取消订单等。
+    * WebSocket API 是一个 **独立** 于 WebSocket Market Data Streams的服务。 即，下订单和收听市场数据需要两个独立的 WebSocket 连接。
+    * WebSocket API 与 REST API 相同过滤器和速率限制规则。
+    * WebSocket API 与 REST API 提供相同的功能，接受相同的参数，返回相同的状态和错误代码。
+
+**WEBSOCKET API 会晚些时候在生产系统中可用。**
+
+---
+
+### 2022-12-13
+
+REST API
+
+错误代码 `-1003` 的一些错误消息已更改
+* 之前的错误消息: `Too much request weight used; current limit is %s request weight per %s %s. Please use the websocket for live updates to avoid polling the API.` 改成了：
+```
+Too much request weight used; current limit is %s request weight per %s. Please use WebSocket Streams for live updates to avoid polling the API.
+```
+* 之前的错误消息: `Way too much request weight used; IP banned until %s. Please use the websocket for live updates to avoid bans.` 改成了：
+```
+Way too much request weight used; IP banned until %s Please use WebSocket Streams for live updates to avoid bans.
+```
+
+---
+
+### 2022-12-05
+
+**备注：** 这些更新正在逐步部署到我们所有的服务器，大约需要一周时间才能完成。
+
+WEBSOCKET
+
+* `!bookTicker` 在 **2022-12-07** 下线。 请改用按 symbol 的最优挂单信息的数据流（`<symbol>@bookTicker`）。
+    * 可以通过一个连接订阅多个 `<symbol>@bookTicker` 数据流。 （例如`wss://stream.axvn.vn:9443/stream?streams=btcusdt@bookTicker/axvnbtc@bookTicker`）
+
+REST API
+
+* 新的错误代码 `-1135`
+    * 如果参数是无效的 JSON 格式，则会出现此错误代码。
+* 新的错误代码 `-1108`
+    * 如果发送的参数的值太长，可能会导致溢出，则会发生此错误。
+    * 此错误代码可能出现在以下接口：
+        * `POST /api/v3/order`
+        * `POST /api/v3/order/cancelReplace`
+        * `POST /api/v3/order/oco`
+* `GET /api/v3/aggTrades` 更新
+    * 之前的规则: `startTime` 和 `endTime` 必须结合使用，并且只能相隔一个小时。
+    * 新的规则: `startTime` 和 `endTime` 可以单独使用，一个小时的限制已被取消。
+        * 仅使用 startTime 时，如果limit的值为N, 将返回从此时间开始的N条交易。
+        * 仅使用 endTime 时，如果limit的值为N, 将返回到此时间的N条交易.
+        * 如果不提供 `limit`，无论是组合使用还是单独发送，服务器端都将使用默认的 `limit`。
+* `GET /api/v3/myTrades` 更新
+    * 修复了 `symbol` + `orderId` 组合会返回所有交易，可能会超过`LIMIT`的默认值`500`。
+    * 之前的行为： API 将根据发送的参数组合发送特定的错误消息。 例如：
+
+        ```json
+        {
+            "code": -1106,
+            "msg": "Parameter X was sent when not required."
+        }
+        ```
+
+    * 新的行为: 如果接口不支持可选参数组合，那么服务器会返回一般性的错误:
+
+        ```json
+        {
+            "code": -1128,
+            "msg": "Combination of optional parameters invalid."
+        }
+        ```
+    * 添加一个新的参数组合: `symbol` + `orderId` + `fromId`.
+    * 下面的参数组合不再支持:
+        * `symbol` + `fromId` + `startTime`
+        * `symbol` + `fromId` + `endTime`
+        * `symbol` + `fromId` + `startTime` + `endTime`
+    * 当前支持的所有参数组合：
+        * `symbol`
+        * `symbol` + `orderId`
+        * `symbol` + `startTime`
+        * `symbol` + `endTime`
+        * `symbol` + `fromId`
+        * `symbol` + `startTime` + `endTime`
+        * `symbol`+ `orderId` + `fromId`
+
+**备注：** 这些新字段将在发布日期后大约一周出现。
+
+* `GET /api/v3/exchangeInfo` 更新
+    * 新字段 `defaultSelfTradePreventionMode` 和 `allowedSelfTradePreventionModes`
+* 下单，查询订单和撤销订单接口的更新:
+    * 响应中会出现新的字段 `selfTradePreventionMode`。
+    * 以下接口会受到影响:
+        * `POST /api/v3/order`
+        * `POST /api/v3/order/oco`
+        * `POST /api/v3/order/cancelReplace`
+        * `GET /api/v3/order`
+        * `DELETE /api/v3/order`
+        * `DELETE /api/v3/orderList`
+* `GET /api/v3/account` 更新
+    * 响应中会出现新的字段 `requireSelfTradePrevention`.
+* 以下接口的响应中会出现新字段 `workingTime`（指示订单何时添加到了订单簿）：
+    * `POST /api/v3/order`
+    * `GET /api/v3/order`
+    * `POST /api/v3/order/cancelReplace`
+    * `POST /api/v3/order/oco`
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+* 如果`trailingDelta`作为参数提供给了`TAKE_PROFIT`，`TAKE_PROFIT_LIMIT`，`STOP_LOSS`或 `STOP_LOSS_LIMIT`的订单，那么下面接口中会出现`trailingTime`, 用来表示追踪单被激活和跟踪价格变化的时间:
+    * `POST /api/v3/order`
+    * `GET /api/v3/order`
+    * `GET /api/v3/openOrders`
+    * `GET /api/v3/allOrders`
+    * `POST /api/v3/order/cancelReplace`
+    * `DELETE /api/v3/order`
+* 字段 `commissionRates` 会在 `GET /api/v3/acccount` 的响应中出现。
+
+
+USER DATA STREAM
+
+* eventType `executionReport` 有新的字段
+    * `V` - `selfTradePreventionMode`
+    * `D` - `trailing_time`  (追踪单被激活时会出现)
+    * `W` - `workingTime`   (如果 `isWorking`=`true` 会出现)
+
+
+---
+
+### 2022-12-02
+
+* 新增一个用于访问市场信息的RESTful API URL: `https://data.axvn.vn`.
+* 新增一个用于访问市场信息的WebSocket URL: `wss://data-stream.axvn.vn`.
+
+---
+
+### 2022-09-30
+
+
+`!bookTicker`的WebSocket推送的变更.
+
+* 全市场最优挂单信息推送(`!bookTicker`)计划在**2022年11月**下线, 具体下线的时间会在后面通告.
+* 请使用按Symbol的最优挂单信息推送(`<symbol>@bookTicker`).
+* 多个 `<symbol>@bookTicker` 可以订阅在一个WebSocket连接上.
+    * 比如 `wss://stream.axvn.vn:9443/stream?streams=btcusdt@bookTicker/axvnbtc@bookTicker`
+
+___
+
+
+### 2022-09-15
+
+这些变动会是滚动发布，可能需要几天才会部署到所有服务器.
+
+* 接口 `GET /api/v3/exchangeInfo` 的变动
+    * 添加一个新的参数 `permissions` , 用于查询适用于相应权限的所有trading pair.
+    * 如果查询时不提供此参数, 则默认值是 `["SPOT","MARGIN","LEVERAGED"]`.
+        * 这表示如果请求 `GET /api/v3/exchangeInfo` 时候没有任何参数, 则会返回拥有权限是 `SPOT`, `MARGIN` , `LEVERAGED` 的trading pair.
+        * 如果要查询其他交易权限, 比如`TRD_GRP_004`等, 需要在查询参数里设置(比如`permissions`=`TRD_GRP_004`).
+    * 此参数不可以同时和 `symbol` 或者 `symbols` 使用.
+
+
+---
+
+### 2022-08-23
+
+此变动会滚动发布, 可能需要一段时间更新到所有服务器上。
+
+* 接口 `GET /api/v3/ticker` 与 `GET /api/v3/ticker/24hr` 变动
+    * 添加新可选参数 `type`
+    * `type` 可接受的参数值有 `FULL` 与 `MINI`
+        * `FULL` 是默认值， 也是原来接口所返回的响应
+        * `MINI` 省略了以下字段: `priceChangePercent`, `weightedAvgPrice`, `bidPrice`, `bidQty`, `askPrice`, `askQty` 与 `lastQty`
+* 添加新错误代码 `-1008`
+    * 每当服务器的请求超载时都会发送此消息
+    * 此错误代码只会在 SPOT API 里出现
+* 接口 `GET /api/v3/account` 添加新参数 `brokered`
+* 添加新接口: `GET /api/v3/uiKlines`
+* 添加新k线间隔: `1s`
+
+
+---
+
+### 2022-08-08
+
+REST API
+
+* 接口 `POST /api/v3/order` 与 `POST /api/v3/order/cancelReplace` 变动
+    * 添加新可选参数 `strategyId` 与 `strategyType`
+        * `strategyId` 是用于将订单标识为某策略的参数。
+        * `strategyType` 是用于标识在执行的策略。(例如：如果所有订单属于现货网格策略，订单可设置为`strategyType=1000000`)
+* 接口 `POST /api/v3/order/oco` 变动
+    * 添加新可选参数  `limitStrategyId`, `limitStrategyType`, `stopStrategyId`, `stopStrategyType`
+    * 这些是OCO订单里两个leg的策略元数据
+    * `limitStrategyType` 和 `stopStrategyType` 都不能低于 `1000000`
+* 接口 `GET /api/v3/order`, `GET /api/v3/openOrders` 与 `GET /api/v3/allOrders` 变动
+    * 新增参数 `strategyId` 与 `strategyType` 必须在下单时填上字段才会在回应JSON里返回
+* 接口 `DELETE /api/v3/order` 与 `DELETE /api/v3/openOrders` 变动
+    * 新增参数 `strategyId` 与 `strategyType` 必须在下单时填上字段才会在回应JSON里返回
+
+
+USER DATA STREAM
+
+* eventType `executionReport` 新增参数
+    * `j` 代表 `strategyId`
+    * `J` 代表 `strategyType`
+    * 必须在下单时填上字段才会在回应里返回
+
+---
+
+### 2022-06-20
+
+接口 `GET /api/v3/ticker` 变动
+
+* 权重从每`symbol` 5 降低到 2.
+* 每次请求最多可以有100个trading pair.
+    * 如果`symbols`请求超过100个trading pair, 会收到如下错误信息:
+    ```json
+    {
+        "code": -1101,
+        "msg": "Too many values sent for parameter 'symbols', maximum allowed up to 100."
+    }
+    ```
+* 单请求的权重上限为100.
+    * 比如，如果请求的trading pair超过50个，请求的权重是100.
+
+---
+
+### 2022-06-15
+
+**注意:** 此变动不会立刻可用, 会在后面几天上线。
+
+
+SPOT API
+
+* 添加新接口 `GET /api/v3/ticker`
+    * 基于 `windowSize` 返回最近的价格变动。
+    * 无需像 `GET /api/v3/ticker/24hr` 提供symbols参数。
+    * 如果不提供 `windowSize` 参数，默认值是`1d`。
+    * 响应和 `GET /api/v3/ticker/24hr` 相似，但不包括以下数据：`prevClosePrice`, `lastQty`, `bidPrice`, `bidQty`, `askPrice`, `askQty`
+* 添加新接口 `POST /api/v3/order/cancelReplace`
+    * 撤消The current挂单并在同样的trading pair上下新订单。
+    * 过滤器会在**撤单前**做判断。
+        * 例如，`MAX_NUM_ORDERS` 是 10，如果目前挂单也是10，调用 `POST /api/v3/order/cancelReplace`会失败。撤单与下单的操作都不会被执行。
+    * 更新将在几天后上线，升级完毕后才会开启此功能。
+* `GET /api/v3/exchangeInfo` 在`symbols`列表里返回新数据`cancelReplaceAllowed`。
+* 添加新的过滤器 `NOTIONAL`
+    * 基于`minNotional` 与 `maxNotional` 值来限制名义价值 (`price * quantity`)
+* 添加新的过滤器 `EXCHANGE_MAX_NUM_ICEBERG_ORDERS`
+    * 账号最大冰山挂单数
+
+WEBSOCKETS
+
+* 新的symbol ticker流, 可以选择 `1h` 或者 `4h`时间窗口：
+    * 单个trading pair: `<symbol>@ticker_<window-size>`
+    * 市场所有trading pair: `!ticker_<window-size>@arr`
+
+
+---
+
+
+### 2022-05-23
+* Order Book 深度的变动
+    * 之前深度的数量在一些极端情况下会出现负数.
+    * 之后深度数量不会溢出, 而是限制在64位的最大值, 这表示深度的数量达到，或者超过了最大值. 最大值和trading pair的`base asset`的精度有关. 比如如果精度是8位小数，最大值则为92,233,720,368.54775807.
+    * 原有的深度价位, 在修复上线后, 需要价位上有变动, 才能体现新的修复.
+* 哪里有影响?
+    * 现货深度接口
+        * `GET /api/v3/depth`
+    * Websocket Streams
+        * `<symbol>@depth`
+        * `<symbol>@depth@100ms`
+        * `<symbol>@depth<levels>`
+        * `<symbol>@depth<levels>@100ms`
+
+* `MAX_POSITION` 的更新
+    * 如果一个订单的数量(`quantity`) 可能导致持有仓位溢出, 会触发过滤器 `MAX_POSITION`.
+
+
+* `GET api/v3/aggTrades` 更新
+    * 如果同时提供 `startTime` 和 `endTime`, 旧的记录会返回.
+* 如果接口 `GET /api/v3/myTrades` 中没有提供参数 `symbol`, 错误消息变为:
+
+```json
+{
+    "code": -1102,
+    "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+}
+```
+* 下面的接口提供参数 `symbols` 用于查询多个symbol.
+    * `GET /api/v3/ticker/24hr`
+    * `GET /api/v3/ticker/price`
+    * `GET /api/v3/ticker/bookTicker`
+
+* 上面接口的权重取决于请求 `symbols` 的数量, 具体请看下面的列表:
+
+|接口|Symbols的数量|权重|
+|-----|-----|----|
+| `GET /api/v3/ticker/price`|Any| 2|
+|`GET /api/v3/ticker/bookTicker`|Any|2|
+|`GET /api/v3/ticker/24hr`|1-20|1|
+|`GET /api/v3/ticker/24hr`|21-100|20|
+|`GET /api/v3/ticker/24hr`| >= 101|40|
+
+
+
+---
+
+### 2022-04-13
+
+REST API
+
+* 现货交易支持追踪止损(Trailing Stop)订单.
+    * 追踪止损通过一个新的参数`trailingDelta`来设置基于市场价的一个自动触发价格.
+    * 只适用于订单类型: `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, `TAKE_PROFIT_LIMIT`.
+    * 参数`trailingDelta`的单位为基点(BIPS).
+        * 比如一个`STOP_LOSS`卖单设置`trailingDelta`为100, 那么订单会在当前市场价格从下单后的最高点下降1%的时候被触发。(100 / 10,000 => 0.01 => 1%)
+    * 用于OCO订单的时候, 如果市场变动触发了`STOP_LOSS`订单, 那么此止损订单变成追踪止损订单.
+    * 当参数`trailingDelta`和`stopPrice`一起使用时, 一旦`stopPrice`条件被触发，系统会开始追踪The current价格变动. 从`stopPrice`价格开始，到基于`trailingDelta`值之间变动.
+    * 如果没有提供`stopPrice`, 系统开始追踪价格从最新价到基于`trailingDelta`值之间变动.
+* `POST /api/v3/order` 变动
+    * 添加新可选参数 `trailingDelta`
+* `POST /api/v3/order/test` 变动
+    * 添加新可选参数 `trailingDelta`
+* `POST /api/v3/order/oco` 变动
+    * 添加新可选参数 `trailingDelta`
+* 添加新的过滤器 `TRAILING_DELTA`
+    * 用于限定 `trailingDelta` 的最大和最小值.
+
+USER DATA STREAM
+
+* User Data Stream 的`executionReport`添加新参数
+  * "d" 代表`trailingDelta`
+
+---
+
+### 2022-04-12
+
+**Note:** 下面的变更会在后面几天上线.
+
+
+* `GET api/v3/allOrders` 如果没有提供 `symbol`, 则返回错误信息:
+    ```json
+    {
+        "code": -1102,
+        "msg": "Mandatory parameter 'symbol' was not sent, was empty/null, or malformed."
+    }
+    ```
+* 修复一个错误信息中的拼写错误。 如果账号被禁用了相应的权限(比如提款，交易等), 则服务器返回错误:
+    ```json
+    "This action is disabled on this account."
+    ```
+* 在市场数据(market data)审计中，发现了一些现货的聚合交易数据(aggTrades)中的问题.
+    * 丢失的记录已经被补回.
+    * 重复的记录被标记成无效，具体的值设置成如下:
+        * p = '0' // price
+        * q = '0' // qty
+        * f = -1 // ﬁrst_trade_id
+        * l = -1 // last_trade_id
+
+---
+
+### 2022-02-28
+
+* 在接口`GET /api/v3/exchangeInfo`中添加新字段`allowTrailingStop`.
+
+---
+
+### 2022-02-24
+
+* 现货规则`PRICE_FILTER`里面的 `(price-minPrice) % tickSize == 0` 改成 `price % tickSize == 0`
+* 新添加了一个规则 `PERCENT_PRICE_BY_SIDE`.
+* 接口 `GET api/v3/depth` 的变动:
+    * `limit` 原先必须是固定值(比如 5, 10, 20, 50, 100, 500, 1000, 5000), 现在可以是在1-5000之间的任意的正整数, 服务器会返回指定的limit数量。(比如如果设置limit=3, 会返回前3个最好的卖价和买价)
+    * 如果`limit`超过5000, 服务器也最多返回5000条记录.
+    * 相应的, 此接口的权重变成:
+
+|Limit|Request Weight
+------|-------
+1-100|  1
+101-500| 5
+501-1000| 10
+1001-5000| 50
+
+* GET `api/v3/aggTrades` 接口的变动:
+    * 当同时提供参数 `startTime` 和 `endTime`, 最旧的订单会优先返回.
+
+---
+
+
+### 2021-12-29
+* 移除trading pair类型枚举
+* 新增权限枚举
+
+---
+
+### 2021-11-01
+* 新增接口 `GET /api/v3/rateLimit/order`
+    * 回传用户在当前时间区间内的下单总数
+    * 此接口的权重为20
+
+---
+
+### 2021-09-14
+* 添加一个基于OpenAPI规范的RESTful API接口定义的[YAML文件](https://github.com/alisababivip/axvn-api-swagger)
+
+---
+
+### 2021-08-12
+* GET `api/v3/myTrades` 添加新的参数 `orderId`
+
+---
+
+### 2021-05-12
+* 在文档中添加接口的数据来源说明
+* 在每个接口中添加相应的数据源
+* GET `api/v3/exchangeInfo` 现在支持单个或者多个trading pair查询
+
+---
+
+### 2021-04-26
+
+从 **April 28, 2021 00:00 UTC** 开始,下面接口的权重有如下变动:
+
+* `GET /api/v3/order` 权重改为 2
+* `GET /api/v3/openOrders` 权重改为 3
+* `GET /api/v3/allOrders` 权重改为 10
+* `GET /api/v3/orderList` 权重改为 2
+* `GET /api/v3/openOrderList` 权重改为 3
+* `GET /api/v3/account` 权重改为 10
+* `GET /api/v3/myTrades` 权重改为 10
+* `GET /api/v3/exchangeInfo` 权重改为 10
+
+---
+
+### 2021-01-01
+
+**USER DATA STREAM**
+
+* 移除`outboundAccountInfo`事件.
+
+---
+
+### 2020-11-27
+
+为了优化性能，除了The current`api.axvn.vn`，新加了一些API的集群。如果访问`api.axvn.vn`有性能问题，也可以尝试访问:
+
+* https://api1.axvn.vn/api/v3/*
+* https://api2.axvn.vn/api/v3/*
+* https://api3.axvn.vn/api/v3/*
+
+### 2020-09-09
+
+用户数据 STREAM
+
+* `outboundAccountInfo`事件不再推荐使用。
+* `outboundAccountInfo`事件以后会被删除(具体时间未定) **请使用 `outboundAccountPosition` 事件.**
+* `outboundAccountInfo`只推送余额不为0，以及余额刚变成0的资产。
+
+---
+
+### 2020-05-01
+* 从2020-05-01 UTC 00:00开始, 所有trading pair都会有最多200个挂单的限制, 体现在过滤器[MAX_NUM_ORDERS](./filters_CN.md#max_num_orders)上.
+  * 已经存在的挂单不会被移除或者撤销。
+  * 单trading pair(`symbol`)的挂单数量达到或超过200的账号, 无法在此trading pair上下新的订单, 除非挂单数量低于200。
+  * OCO订单在被触发成`LIMIT`订单, 或者被触发成`STOP_LOSS`(或者`STOP_LOSS_LIMIT`)前, 被认为是2个挂单量. 一旦OCO订单被触发, 就只被算作一个挂单。
+
+---
+
+### 2020-04-23
+
+WEB SOCKET 连接限制
+
+* Websocket服务器每秒最多接受5个消息。消息包括:
+	* PING帧
+	* PONG帧
+	* JSON格式的消息, 比如订阅, 断开订阅.
+* 如果用户发送的消息超过限制，连接会被断开连接。反复被断开连接的IP有可能被服务器屏蔽。
+* 单个连接最多可以订阅 **1024** 个Streams。
+
+---
+### 2020-03-24
+
+* 添加过滤器 `MAX_POSITION`.
+    * 这个过滤器定义账户允许的基于`base asset`的最大仓位。一个用户的仓位可以定义为如下资产的总和:
+        * `base asset`的可用余额
+        * `base asset`的锁定余额
+        * 所有处于open的买单的数量总和
+
+    * 如果用户的仓位大于最大的允许仓位，买单会被拒绝。
+
+---
+
+### 2018-11-13
+REST API
+  * 账户交易权限被禁时允许进行撤单操作。
+  * 增加了新的过滤器: `PERCENT_PRICE`, `MARKET_LOT_SIZE`, `MAX_NUM_ICEBERG_ORDERS`。
+  * 增加了 `RAW_REQUESTS` 频率限制. 该限制仅统计请求次数，不统计请求权重。
+  * /api/v3/ticker/price 无symbol参数时，权重增加到2。
+  * /api/v3/ticker/bookTicker 无symbol参数时，权重增加到2。
+  * DELETE /api/v3/order 现在会返回订单撤销前所处的末次状态。
+  * `MIN_NOTIONAL` 新增两个参数: `applyToMarket` (是否对市价单生效) and `avgPriceMins` (对市价单生效时，估算金额时使用过去几分钟的平均价格?).
+  *  /api/v1/exchangeInfo 中的限制增加了`intervalNum`. `intervalNum`表示该限制针对多少时间间隔进行统计. 例如: `intervalNum`= 5, `interval` = minute, 表示该限制对每5分钟内的行为进行统计。
+
+#### 如何计算过去n分钟平均价格:
+  1. [对过去n分钟所有订单的数量\*价格求和] / 过去n分钟所有订单的数量
+  2. 如果过去n分钟没有交易发生，则继续向前追溯，直到找到第一个交易，以此价格作为过去n分钟平均价格。
+  3. 如果该trading pair之前从未发生过交易，则无平均价格，亦即无法在该trading pair下市价单，必须至少有一个（双方均未限价单）的交易成交后才可以下市价单。
+  4. 当前系统使用的平均价格可以通过接口 `https://api.axvn.vn/api/v3/avgPrice?symbol=<symbol>`查询
+     例如
+     https://api.axvn.vn/api/v3/avgPrice?symbol=AXVNUSDT
+
+USER DATA STREAM
+  * 成交报告中增加了 `末次成交金额` (`Y`)，等于 `末次成交量` * `末次成交价格` (`L` * `l`).
+
+---
+
+### 2018-07-18
+REST API
+  *  新过滤器: `ICEBERG_PARTS`
+  *  `POST api/v3/order` 中 `newOrderRespType` 参数的缺省值更改; `MARKET`  `LIMIT` 默认为 `FULL`, 其他默认为 `ACK`.
+  *  POST api/v3/order `RESULT` 与 `FULL` 响应中增加 `cummulativeQuoteQty`
+  *  GET api/v3/openOrders 无symbol调用权重下降为 40.
+  *  GET api/v3/ticker/24hr 无symbol调用权重下降为 40.
+  *  GET /api/v1/trades amount最大可取到1000.
+  *  GET /api/v1/historicalTrades amount最大可取到1000.
+  *  GET /api/v1/aggTrades amount最大可取到1000.
+  *  GET /api/v1/klines amount最大可取到1000.
+  *  订单查询结果返回中增加 `updateTime` 字段，代表该订单末次更新(创建、成交、过期、取消、拒绝等等)时间; `time` 仅表示创建时间.
+  *  订单查询结果中增加 `cummulativeQuoteQty`字段. 负值表示尚无任何成交，该字段不可用.
+  *  `REQUESTS` 限制更名为 `REQUEST_WEIGHT`. 避免名字造成的误解。
+
+USER DATA STREAM
+  *  订单报告与成交报告中增加`cummulativeQuoteQty` 字段 (`Z`). 表示已经成交的金额， 即已经花费的金额(买入订单)或已经收到的金额(卖出订单)，均未计算手续费. 此功能增加之前成交的订单在历史订单接口中查询到的该字段可能小于零.
+  *  `cummulativeQuoteQty`/`cummulativeQty` 可以用来计算该订单已经成交部分的平均价格。
+  *  成交报告中增加了 `O`字段 (订单创建时间)
+
+---
+
+### 2018-01-23
+  * GET /api/v1/historicalTrades权重降为 5
+  * GET /api/v1/aggTrades 权重降为 1
+  * GET /api/v1/klines 权重降为 1
+  * GET /api/v1/ticker/24hr 不带symbol参数的权重降为 symbols总数 / 2
+  * GET /api/v3/allOrders 权重降为 5
+  * GET /api/v3/myTrades 权重降为 5
+  * GET /api/v3/account 权重降为 5
+  * GET /api/v1/depth limit=500 权重降为 5
+  * GET /api/v1/depth limit=1000 权重降为 10
+  * websocket 用户增加 -1003 error code
+
+---
+
+### 2018-01-20
+  * GET /api/v1/ticker/24hr 单symbol参数调用权重降为 1
+  * GET /api/v3/openOrders 不带symbol参数的权重降为 symbols总数 / 2
+  * GET /api/v3/allOrders  权重降为  15
+  * GET /api/v3/myTrades  权重降为  15
+  * GET /api/v3/order  权重降为  1
+  * 自成交现在会在myTrades结果中有两条记录。
+
+---
+
+### 2018-01-14
+  * GET /api/v1/aggTrades 权重改为 2
+  * GET /api/v1/klines 权重改为 2
+  * GET /api/v3/order 权重改为 2
+  * GET /api/v3/allOrders 权重改为 20
+  * GET /api/v3/account 权重改为 20
+  * GET /api/v3/myTrades 权重改为 20
+  * GET /api/v3/historicalTrades 权重改为 20
