@@ -27,8 +27,8 @@ The following will take place on **2026-08-04 at approximately 07:00 UTC**.
 * Exchange Information responsemay have a new `symbolStatus` value `CANCEL_ONLY`.
     * REST API: `GET /api/v3/exchangeInfo`
     * WebSocket API: `exchangeInfo`
-* REST and WebSocket API SBE schema [spot_3_5.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_5.xml)
-  * The current schema 3:4 [spot_3_4.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_4.xml) is now deprecated and will be retired in 6 months per our schema deprecation policy.
+* REST and WebSocket API SBE schema [spot_3_5.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_5.xml)
+  * The current schema 3:4 [spot_3_4.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_4.xml) is now deprecated and will be retired in 6 months per our schema deprecation policy.
   * Changes in schema 3:5:
     * Updated `symbolStatus` enum: new value `CANCEL_ONLY` added
 
@@ -46,7 +46,7 @@ The following will take place on **2026-08-04 at approximately 07:00 UTC**.
 REST and WebSocket API:
 
 * Note: Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema), SBE schema 3:1 will be retired on 2026-06-29.
-* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+* [SBE schema lifecycle for production](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
 
 ---
 
@@ -56,7 +56,7 @@ REST and WebSocket API:
 
 * Documentation update: `LastFragment (893)` was removed from [FIX API](./fix-api_CN.md#marketdataincrementalrefresh) 
   * As mentioned in the previous announcement, `MarketDataIncrementalRefresh <X>` message has not been fragmented since 2025-12-18, and the server no longer sends `LastFragment (893)`.
-  * This field has been removed from [FIX API](fix-api_CN.md) field list and the corresponding [QuickFIX MD schema](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) has been removed.
+  * This field has been removed from [FIX API](fix-api_CN.md) field list and the corresponding [QuickFIX MD schema](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) has been removed.
 * Documentation update: Updated [News `<B>`](./fix-api_CN.md#news-b) message description to align with [2026-06-09](#2026-06-09) announcement.
 
 ---
@@ -128,7 +128,7 @@ All descriptions of fixed time periods before server shutdown have been removed 
       * `allOrderLists`
 
 * REST and WebSocket API SBE schema 3:4
-  * The current schema 3:3 [spot_3_3.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_3.xml) is now deprecated and will be retired in 6 months per our schema deprecation policy.
+  * The current schema 3:3 [spot_3_3.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_3.xml) is now deprecated and will be retired in 6 months per our schema deprecation policy.
   * Changes in schema 3:4:
     * new message `BlockTradesResponse`
     * new type `blockTradeId`
@@ -275,7 +275,7 @@ Clarified information about [Price Range Execution Rules](./faqs/price_range_exe
       * `referencePrice.calculation`
   * New JSON data stream: `<symbol>@referencePrice`
 * REST and WebSocket API SBE schema 3:3
-  * The current schema 3:2 [spot_3_2.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_2.xml) is now deprecated and will be retired within 6 months per our schema deprecation policy.
+  * The current schema 3:2 [spot_3_2.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_2.xml) is now deprecated and will be retired within 6 months per our schema deprecation policy.
   * Changes in schema 3:3:
     * new message `ExecutionRulesResponse`
     * new message `PriceRangeExecutionRule`(embedded in `ExecutionRulesResponse`)
@@ -289,7 +289,7 @@ Clarified information about [Price Range Execution Rules](./faqs/price_range_exe
     * new message `ServerShutdownEvent` (WebSocket API only)
 * FIX SBE schema 1:1
   * This schema will be used for FIX Order Entry, FIX Drop Copy, and FIX Market Data Feed.
-  * The current FIX schema 1:0 [spot-fixsbe-1_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) is now deprecated and will be retired within 6 months per our schema deprecation policy.
+  * The current FIX schema 1:0 [spot-fixsbe-1_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) is now deprecated and will be retired within 6 months per our schema deprecation policy.
   * Changes in schema 1:1:
     * new enum `expiryReason`
     * New field `ExpiryReason` added to `ExecutionReport`
@@ -363,7 +363,7 @@ Clarified information about [Price Range Execution Rules](./faqs/price_range_exe
 REST and WebSocket API:
 
 * Note: Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema), SBE schema 3:0 will be retired on 2026-02-19.
-* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+* [SBE schema lifecycle for production](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
 
 ---
 
@@ -458,7 +458,7 @@ Per the **2025-10-24** announcement, the following endpoints and methods will no
 
 ### 2025-12-09
 
-* [FIX SBE Schema](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) updated to use `smallGroupSize16Encoding` in `MarketDataSnapshot`, and `presence="optional"` for the `MDEntrySize` field in incremental single trading pair order book / depth streams.
+* [FIX SBE Schema](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot-fixsbe-1_0.xml) updated to use `smallGroupSize16Encoding` in `MarketDataSnapshot`, and `presence="optional"` for the `MDEntrySize` field in incremental single trading pair order book / depth streams.
 * Updated documentation on [FIX vs FIX SBE](fix-api_CN.md#fix-vs-fix-sbe-schema).
 * Added a note in the REST and WebSocket API documentation: **Please avoid using SQL keywords in requests**, as this may trigger Web Application Firewall (WAF) rules and cause security blocks. For details, see https://www.axvn.vn/zh-CN/support/faq/detail/360004492232 .
 
@@ -496,7 +496,7 @@ Per the **2025-10-24** announcement, the following endpoints and methods will no
 **Note: The following changes are expected to take effect on 2025-12-18 at approximately 07:00 UTC:**
 * [ICEBERG_PARTS](https://developers.axvn.vn/docs/zh-CN/axvn-docs-api/filters#iceberg_parts) will be increased to 25 for all trading pairs.
 * [FIX SBE support](fix-api_CN.md) will go live.
-* [One-Pays-the-Other (OPO)](https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/opo_CN.md) will go live for all trading pairs.
+* [One-Pays-the-Other (OPO)](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/opo_CN.md) will go live for all trading pairs.
   * `opoAllowed` will start appearing in `Exchange Information` requests, indicating whether each trading pair supports One-Pays-the-Other (OPO).
     * REST API: `GET /api/v3/exchangeInfo`
     * WebSocket API: `exchangeInfo`
@@ -510,8 +510,8 @@ Per the **2025-10-24** announcement, the following endpoints and methods will no
     * FIX API:
       * New field `OPO (25046)` added to `NewOrderList <E>`. Please update to the latest QuickFIX schema to support OPO.
 * New STP mode [`TRANSFER`](./faqs/stp_faq_CN.md) added. The specific date for enabling STP `TRANSFER` has not been determined.
-* **SBE: New schema version 3:2 ([spot_3_2.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_2.xml)).**
-  * The current schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml)) is now deprecated and will be retired in 6 months per our schema deprecation policy.
+* **SBE: New schema version 3:2 ([spot_3_2.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_2.xml)).**
+  * The current schema 3:1 ([spot_3_1.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml)) is now deprecated and will be retired in 6 months per our schema deprecation policy.
   * Changes in schema 3:2:
     * New enum value `TRANSFER` added for `selfTradePreventionMode` and `allowedSelfTradePreventionModes`.
     * All schemas below 3:1 cannot return responses containing the STP mode `TRANSFER` (e.g. Exchange Information, order placement, order cancellation, or order status queries). <br>An error will be returned when the response cannot be represented by the requested schema.
@@ -617,13 +617,13 @@ These features will remain available until a separate deprecation announcement i
 REST and WebSocket API:
 
 * Note: Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema), SBE schema 2:1 will be retired on 2025-10-24.
-* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+* [SBE schema lifecycle for production](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
 
 ---
 
 ### 2025-10-08
 
-* Updated [QuickFIX Schema](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) for FIX market data:
+* Updated [QuickFIX Schema](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) for FIX market data:
   * Updated `RecvWindow(25000)` to support the microsecond-level feature announced on [2025-08-12](#2025-08-12).
   * Updated [`InstrumentList`](fix-api_CN.md#instrumentlist) message:
     * new fields added: `StartPriceRange`, `EndPriceRange`.
@@ -640,7 +640,7 @@ REST and WebSocket API:
 * A new endpoint has been added to retrieve the list of filters related to the account for a specified trading pair. This is the only endpoint that currently shows whether the `MAX_ASSET` filter is applied to the account.
   * REST API: [`GET /api/v3/myFilters`](rest-api_CN.md#myFilters)
   * WebSocket API: [`myFilters`](web-socket-api_CN.md#myFilters)
-* Some comments in **SBE: schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml))** have been added, updated, and removed. Although `3:1` users do not need to update to this version of the schema, we recommend updating to maintain consistency.
+* Some comments in **SBE: schema 3:1 ([spot_3_1.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml))** have been added, updated, and removed. Although `3:1` users do not need to update to this version of the schema, we recommend updating to maintain consistency.
 * Documentation for the [`MAX_ASSET`](filters_CN.md#max_asset) filter has been added.
 
 ---
@@ -655,7 +655,7 @@ REST and WebSocket API:
 
 ### 2025-09-12
 
-* Updated the [QuickFIX schema](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) for the FIX Order Entry API to support pegged orders.
+* Updated the [QuickFIX schema](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) for the FIX Order Entry API to support pegged orders.
 * Updated the `RecvWindow` sections in the FIX API documentation:
   * [Message Components](fix-api_CN.md#header)
   * [Timing Security](fix-api_CN.md#timingsecurity)
@@ -676,7 +676,7 @@ REST and WebSocket API:
 
 ### 2025-08-25
 
-* **SBE: Schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml))** will be updated on **2025-08-25 05:00 UTC**.
+* **SBE: Schema 3:1 ([spot_3_1.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml))** will be updated on **2025-08-25 05:00 UTC**.
   * The following fields have been renamed to resolve a compilation issue found in Java code generated by the [SbeTool](faqs/sbe_faq_CN.md#generate-sbe-decoders) code generator.
     * Although only users affected by this issue need to update the schema, we recommend all users upgrade to the latest version for consistency.
     * Message `MaxAssetFilter`
@@ -707,8 +707,8 @@ REST and WebSocket API:
     * `account.commission`
     * `order.test` with `computeCommissionRates=true`
     * `sor.order.test` with `computeCommissionRates=true`
-* **SBE: New schema 3:1 ([spot_3_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml)) is now available.**
-  * The current schema 3:0 ([spot_3_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml)) will be deprecated and retired within 6 months per our deprecation policy.
+* **SBE: New schema 3:1 ([spot_3_1.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml)) is now available.**
+  * The current schema 3:0 ([spot_3_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml)) will be deprecated and retired within 6 months per our deprecation policy.
   * Changes in schema 3:1:
     * `ExchangeInfoResponse`: new field `pegInstructionsAllowed` added
     * `ExecutionReportEvent`: new fields `pricePeg`, `pricePegOffsetLevel`, and `peggedPrice` added
@@ -833,7 +833,7 @@ The following changes will take effect starting **2025-08-28 07:00 UTC**:
 REST and WebSocket API:
 
 * Note:Per our SBE policy, [6 months after being deprecated](faqs/sbe_faq_CN.md#sbe-schema)， SBE 2：0 模式将于 2025 年 06 月 12 日被禁用。
-* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+* [SBE schema lifecycle for production](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
 
 ---
 
@@ -944,7 +944,7 @@ REST and WebSocket API:
 * News `<B>` 在 Headline 字段中包括了一个倒计时消息。
   * 在本次更新完成后： 当服务器进入维护状态时，将向客户端**每隔 10 秒发送一条** `News` 消息，并**持续 10 分钟**。在10分钟过后，客户端将被注销，其会话将被关闭。
 * OrderCancelRequest `<F>` 和 OrderCancelRequestAndNewOrderSingle `<XCN>` 现在允许使用 `orderId` 和 `clientOrderId`。
-* [FIX Order Entry会话的 QuickFix 模式](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) 已被更新，将支持保留优先级的Updates订单请求（Order Amend Keep Priority）和新的 STP 方式 `DECREMENT`。
+* [FIX Order Entry会话的 QuickFix 模式](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) 已被更新，将支持保留优先级的Updates订单请求（Order Amend Keep Priority）和新的 STP 方式 `DECREMENT`。
 
 #### User Data Streams
 
@@ -967,7 +967,7 @@ REST and WebSocket API:
 
 following changes将于**2025 年 4 月 24 日 07:00 UTC**发生：
 
-* ~~[保留优先级的Updates订单请求（Order Amend Keep Priority）](https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/order_amend_keep_priority_CN.md) 将可以使用。 (请注意，必须在相应trading pair上启用该功能后才能使用。)~~
+* ~~[保留优先级的Updates订单请求（Order Amend Keep Priority）](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/order_amend_keep_priority_CN.md) 将可以使用。 (请注意，必须在相应trading pair上启用该功能后才能使用。)~~
   * 新字段 `amendAllowed` 会出现在 Exchange Information response中。
     * **2025-04-21 更新 ："保留优先级的Updates订单请求" 的具体启用日期尚未确定**
     * REST API: `GET /api/v3/exchangeInfo`
@@ -1002,8 +1002,8 @@ following changes将于**2025 年 4 月 24 日 07:00 UTC**发生：
       * `DELETE /api/v3/orderList`
     * WebSocket API
       * `orderList.cancel`
-* **SBE： 新模式 3:0 ([spot_3_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml)) 将可以使用。**
-  * 现行模式 2:1 ([spot_2_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_1.xml)) 将会被废止并根据我们的deprecation policy，在6个月内停止使用。
+* **SBE： 新模式 3:0 ([spot_3_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml)) 将可以使用。**
+  * 现行模式 2:1 ([spot_2_1.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_2_1.xml)) 将会被废止并根据我们的deprecation policy，在6个月内停止使用。
   * 请Note:在新模式被发布前，尝试使用模式 3:0 将导致错误。
   * 3:0 中的更改：
     * 将会支持保留优先级的Updates订单（Order Amend Keep Priority）请求:
@@ -1063,7 +1063,7 @@ following changes将于**2025 年 4 月 24 日 07:00 UTC**发生：
 ### 2025-02-12
 
 * **Note:这些更改将于 2025 年 2 月 26 日 05：00 UTC 生效。请确保在此之前您已下载最新的模式。
-* `AggressorSide （2446)` 将在 FIX Market Data Feed中提供。QuickFIX 模式 [file](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) 也已更新。
+* `AggressorSide （2446)` 将在 FIX Market Data Feed中提供。QuickFIX 模式 [file](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) 也已更新。
 
 ---
 
@@ -1081,7 +1081,7 @@ following changes将于**2025 年 4 月 24 日 07:00 UTC**发生：
 ### 2025-01-09
 
 * FIX 市场数据将在 **January 16, 05:00 UTC** 提供。FIX API documentation已更新有关此功能。
-* 请参阅此 [链接](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) 以获取 FIX市场数据的 QuickFIX 模式。
+* 请参阅此 [链接](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml) 以获取 FIX市场数据的 QuickFIX 模式。
 
 ---
 
@@ -1177,7 +1177,7 @@ User Data Streams
 
 SBE
 
-* 已发布新模式 2:1 [spot_2_1.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_1.xml)。 当前模式 2:0 [spot_2_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml) 将被弃用。根据我们的模式deprecation policy，当前模式 2:0 会将在 6个月内从 API 中停用。
+* 已发布新模式 2:1 [spot_2_1.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_2_1.xml)。 当前模式 2:0 [spot_2_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml) 将被弃用。根据我们的模式deprecation policy，当前模式 2:0 会将在 6个月内从 API 中停用。
 * 模式 2：1 是 模式 2：0 的向后兼容更新版本。当您请求模式 2：0 或 2：1 时，您将始终收到 2：1 格式的有效载荷。
 * SBE 模式 2：1 中的更改：
   * 下单/取消订单响应中的新字段 `origQuoteOrderQty` （Note:使用 2：0 模式生成的解码器将忽略此字段）：
@@ -1220,7 +1220,7 @@ User Data Stream
 
 FIX API
 
-* [模式](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) 中已添加了新的管理消息 News \<B\>，该消息可用于所有 FIX 服务。收到此消息意味着您的连接即将关闭。
+* [模式](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml) 中已添加了新的管理消息 News \<B\>，该消息可用于所有 FIX 服务。收到此消息意味着您的连接即将关闭。
 
 following changes将在**2024 年 12 月 16 日到 2024 年 12 月 20日之间**发生：
 
@@ -1251,7 +1251,7 @@ following changes将在**2024 年 12 月 16 日到 2024 年 12 月 20日之间**
 Rest 和 WebSocket API:
 
 * Note:根据我们的 SBE 政策，SBE 1：0 模式将于 2024 年 10 月 25 日被禁用 [废止后 6 个月](./faqs/sbe_faq_CN.md)。
-* [SBE schema lifecycle for production](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
+* [SBE schema lifecycle for production](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/sbe_schema_lifecycle_prod.json) has been updated based on this change.
 
 ---
 
@@ -1361,7 +1361,7 @@ WebSocket API
 
 SBE
 
-* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式deprecation policy，会将在 6 个月内下线。
+* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式deprecation policy，会将在 6 个月内下线。
 * 在 REST API 或 WebSocket API 上使用模式 1:0 时，消息 `ExchangeInfoResponse` 中的组"权限"将始终为空。在升级到模式 2:0后， 您才可以在 `permissionSets` 组中查找权限信息。
 * 最新模式仍将支持is deprecated的 OCO 请求。
 * 请注意，在模式 2:0 实际发布之前尝试使用它会导致错误。
@@ -1411,7 +1411,7 @@ WebSocket API
 
 SBE
 
-* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/alisababivip/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式deprecation policy，会将在 6 个月内下线。
+* 已发布新模式 2:0 [Spot_2_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_2_0.xml)。 当前模式 1:0 [spot_1_0.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml) 将被弃用，并从根据我们模式deprecation policy，会将在 6 个月内下线。
 * 在 REST API 或 WebSocket API 上使用模式 1:0 时，消息 `ExchangeInfoResponse` 中的组"权限"将始终为空。在升级到模式 2:0后， 您才可以在 `permissionSets` 组中查找权限信息。
 * 最新模式仍将支持is deprecated的 OCO 请求。
 * 请注意，在模式 2:0 实际发布之前尝试使用它会导致错误。
@@ -1432,9 +1432,9 @@ SBE
 
 SBE 模式已经Updated WebSocket API 元数据，但并没有增加 `schemaId` 或者 `version`。
 
-* 仅在 REST API 上使用 SBE 的用户可以继续使用 SBE 模式 [`128b94b2591944a536ae427626b795000100cf1d`](https://github.com/alisababivip/axvn-docs-api/blob/128b94b2591944a536ae427626b795000100cf1d/sbe/schemas/spot_1_0.xml)，或者更新到新提交的 SBE 模式。
+* 仅在 REST API 上使用 SBE 的用户可以继续使用 SBE 模式 [`128b94b2591944a536ae427626b795000100cf1d`](https://github.com/nham-quoc-huan/axvn-docs-api/blob/128b94b2591944a536ae427626b795000100cf1d/sbe/schemas/spot_1_0.xml)，或者更新到新提交的 SBE 模式。
 
-* 希望在 WebSocket API 上使用 SBE 的用户，需要更新到[最新的 SBE 模式](https://github.com/alisababivip/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml)。
+* 希望在 WebSocket API 上使用 SBE 的用户，需要更新到[最新的 SBE 模式](https://github.com/nham-quoc-huan/axvn-docs-api/blob/becd4d44a09d94821d2dc761ba9197aae8b495c3/sbe/schemas/spot_1_0.xml)。
 
 SBE 的 [FAQ](./faqs/sbe_faq_CN.md) 已经更新。
 
@@ -2380,7 +2380,7 @@ USER DATA STREAM
 ---
 
 ### 2021-09-14
-* 添加一个基于OpenAPI规范的RESTful API接口定义的[YAML文件](https://github.com/alisababivip/axvn-api-swagger)
+* 添加一个基于OpenAPI规范的RESTful API接口定义的[YAML文件](https://github.com/nham-quoc-huan/axvn-api-swagger)
 
 ---
 

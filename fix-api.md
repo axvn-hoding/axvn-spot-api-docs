@@ -122,14 +122,14 @@ on how to set up an Ed25519 key pair.
 * Supports placing orders, canceling orders, and querying current limit usage.
 * Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 * Only API keys with `FIX_API` are allowed to connect.
-* QuickFIX Schema can be found [here](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml).
+* QuickFIX Schema can be found [here](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml).
 
 ### FIX API Drop Copy sessions
 
 * Endpoint is: `tcp+tls://fix-dc.axvn.vn:9000`
 * Supports receiving all of the account's [ExecutionReport`<8>`](#executionreport) and [List Status`<N>`](#liststatus).
 * Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
-* QuickFIX Schema can be found [here](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml).
+* QuickFIX Schema can be found [here](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-oe.xml).
 * Data in Drop Copy sessions is delayed by 1 second.
 
 ### FIX API Market Data sessions
@@ -138,7 +138,7 @@ on how to set up an Ed25519 key pair.
 * Supports market data streams and active instruments queries.
 * Does not support placing or canceling orders.
 * Only API keys with `FIX_API` or `FIX_API_READ_ONLY` are allowed to connect.
-* QuickFIX Schema can be found [here](https://github.com/alisababivip/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml).
+* QuickFIX Schema can be found [here](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/fix/schemas/spot-fix-md.xml).
 
 ### FIX Connection Lifecycle
 
@@ -1210,7 +1210,7 @@ Sent by the client to query information about instruments.
 Sent by the server in a response to the [InstrumentListRequest`<x>`](#instrumentlistrequest).
 
 > [!NOTE]
-> More detailed symbol information is available through the [exchangeInfo](https://github.com/alisababivip/axvn-docs-api/blob/master/rest-api.md#exchange-information) endpoint.
+> More detailed symbol information is available through the [exchangeInfo](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/rest-api.md#exchange-information) endpoint.
 
 | Tag     | Name                  | Type       | Required | Description                                |
 |---------|-----------------------|------------|----------|--------------------------------------------|
@@ -1390,7 +1390,7 @@ Sent by the server when there is a change in a suaxvnscribed stream.
 
 ## FIX SBE
 
-FIX SBE (Simple Binary Encoding) can be used instead of FIX with the [spot_fix_prod_latest.xml](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_fix_prod_latest.xml) schema file.
+FIX SBE (Simple Binary Encoding) can be used instead of FIX with the [spot_fix_prod_latest.xml](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_fix_prod_latest.xml) schema file.
 
 ### SBE
 

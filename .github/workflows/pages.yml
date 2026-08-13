@@ -1,0 +1,85 @@
+name: Deploy Docs → docs.axvn.vn
+
+on:
+  push:
+    branches: [axvn-main, main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install -g markdownlint-cli
+
+      - name: Prepare static site
+        run: |
+          mkdir -p _site
+          # Copy all markdown and assets to _site
+          cp -r . _site/ 2>/dev/null || true
+          rm -rf _site/.git _site/.github _site/node_modules
+
+          # Generate minimal index.html from README.md
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>AXVN Spot API Documentation</title>
+            <style>
+              body { font-family: system-ui, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; }
+              h1 { color: #1a1a2e; } a { color: #3b82d4; }
+            </style>
+          </head>
+          <body>
+            <h1>AXVN Spot API Documentation</h1>
+            <p>Official REST, WebSocket and FIX API documentation for <strong>AXVN Network</strong>.</p>
+            <ul>
+              <li><a href="rest-api.md">REST API Reference</a></li>
+              <li><a href="web-socket-api.md">WebSocket API</a></li>
+              <li><a href="web-socket-streams.md">WebSocket Streams</a></li>
+              <li><a href="fix-api.md">FIX API</a></li>
+              <li><a href="errors.md">Error Codes</a></li>
+              <li><a href="enums.md">Enums</a></li>
+              <li><a href="filters.md">Filters</a></li>
+            </ul>
+            <p><a href="https://github.com/axvn-hoding/axvn-spot-api-docs">View on GitHub</a></p>
+          </body>
+          </html>
+          EOF
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

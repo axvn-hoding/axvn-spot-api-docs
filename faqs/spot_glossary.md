@@ -233,11 +233,11 @@ Notional value
 * One-Cancels-the-Other type of order that is composed by a pair of orders (e.g. `STOP_LOSS` or `STOP_LOSS_LIMIT` paired with a `LIMIT_MAKER` order) with the condition that if one of the orders execute, the other is automatically expired.
 
 `OPO`
-* [One-Pays-The-Other](https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/opo.md), a special subset of OTO.
+* [One-Pays-The-Other](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/opo.md), a special subset of OTO.
 * When the working order fully fills, the accumulated received quantity is used for the quantity of the pending order.
 
 `OPOCO`
-* [One-Pays-The-Other](https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/opo.md), a special subset of OTOCO.
+* [One-Pays-The-Other](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/opo.md), a special subset of OTOCO.
 * When the working order fully fills, the accumulated received quantity is used for the quantity of the pending OCO pair.
 
 Order Amend Keep Priority

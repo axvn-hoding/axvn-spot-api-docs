@@ -4,7 +4,7 @@
 
 * The base endpoint is **stream-sbe.testnet.axvn.vn** or **stream-sbe.testnet.axvn.vn:9443**.
 * To retrieve market data in JSON format, please refer to [this page](web-socket-streams.md).
-* SBE schema used for decoding the streams can be found [here](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/stream_1_0.xml).
+* SBE schema used for decoding the streams can be found [here](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/stream_1_0.xml).
 * All symbols in stream names are **lowercase**.
 * You can suaxvnscribe to a single stream at **/ws/\<streamName\>**.
 * You can suaxvnscribe to multiple streams at **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**.

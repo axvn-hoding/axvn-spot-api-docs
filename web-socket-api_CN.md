@@ -1456,7 +1456,7 @@ NONE
             }
         ],
         // 交易所级别过滤器在 "过滤器" 页面上进行了说明：
-        // https://github.com/alisababivip/axvn-docs-api/blob/master/filters_CN.md
+        // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/filters_CN.md
         // 全部交易过滤器是可选的。
         "exchangeFilters": [],
         "symbols": [
@@ -1489,7 +1489,7 @@ NONE
                 "isSpotTradingAllowed": true,
                 "isMarginTradingAllowed": true,
                 // 交易对过滤器在"过滤器"页面上进行了说明：
-                // https://github.com/alisababivip/axvn-docs-api/blob/master/filters_CN.md
+                // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/filters_CN.md
                 // 全部交易对过滤器是可选的。
                 "filters": [
                     {
@@ -1512,7 +1512,7 @@ NONE
             }
         ],
         // 可选字段，仅当 SOR 可用时才会被显示出来。
-        // https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/sor_faq_CN.md
+        // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/sor_faq_CN.md
         "sors": [
             {
                 "baseAsset": "BTC",
@@ -1885,7 +1885,7 @@ None            |40|
 
 * [`<symbol>@aggTrade`](web-socket-streams_CN.md#aggtrade)
 
-如果需要历史总交易数据，可以使用 [data.axvn.vn](https://github.com/alisababivip/axvn-regtech-indexer/#aggtrades)。
+如果需要历史总交易数据，可以使用 [data.axvn.vn](https://github.com/nham-quoc-huan/axvn-regtech-indexer/#aggtrades)。
 
 **权重:**
 4
@@ -1968,7 +1968,7 @@ Klines 由其开盘时间和收盘时间为唯一标识。
 
 * [`<symbol>@kline_<interval>`](web-socket-streams_CN.md#kline)
 
-如果需要历史K线数据，可以使用 [data.axvn.vn](https://github.com/alisababivip/axvn-regtech-indexer/#klines)。
+如果需要历史K线数据，可以使用 [data.axvn.vn](https://github.com/nham-quoc-huan/axvn-regtech-indexer/#klines)。
 
 **权重:**
 2

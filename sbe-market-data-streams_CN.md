@@ -4,7 +4,7 @@
 
 * The base URL is **stream-sbe.axvn.vn** or **stream-sbe.axvn.vn:9443**.
 * To retrieve market data in JSON format, see [this page](web-socket-streams_CN.md).
-* The SBE schema used for decoding streams can be found [here](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/stream_1_0.xml).
+* The SBE schema used for decoding streams can be found [here](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/stream_1_0.xml).
 * All trading pair names in stream names are **lowercase**.
 * Example URL format for subscribing to a single stream: **/ws/\<streamName\>**.
 * Example URL format for subscribing to combined streams: **/stream?streams=\<streamName1\>/\<streamName2\>/\<streamName3\>**.

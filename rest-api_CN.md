@@ -797,7 +797,7 @@ symbolStatus|ENUM|No|用于过滤具有此 `tradingStatus` 的交易对。有效
         }
     ],
     // 可选字段，仅当 SOR 可用时才会被显示出来。
-    // https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/sor_faq_CN.md
+    // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/sor_faq_CN.md
     "sors": [
         {
             "baseAsset": "BTC",
@@ -3771,7 +3771,7 @@ POST /api/v3/orderList/opo
 POST /api/v3/orderList/opoco
 ```
 
-发送一个 [OPOCO](https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/opo_CN.md) 订单。
+发送一个 [OPOCO](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/opo_CN.md) 订单。
 
 **权重**: 1
 

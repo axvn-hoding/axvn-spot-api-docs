@@ -80,7 +80,7 @@ The REST API, WebSocket API, and FIX API support `SBE` for Spot (SPOT).
 <a id="sbe-schema"></a>
 ### SBE Schema
 
-* The schema(s) in use are stored in this repository; [see here](https://github.com/alisababivip/axvn-docs-api/tree/master/sbe/schemas).
+* The schema(s) in use are stored in this repository; [see here](https://github.com/nham-quoc-huan/axvn-docs-api/tree/master/sbe/schemas).
 * Any updates to schemas will be recorded in the [changelog](../CHANGELOG_CN.md).
 
 <a id="regarding-legacy-support"></a>
@@ -115,9 +115,9 @@ The REST API, WebSocket API, and FIX API support `SBE` for Spot (SPOT).
     * In the `LogonAck` message, the field `sbeSchemaIdVersionDeprecated` will be set to `true`.
     * All SBE response messages will be encoded using the highest schema version for the provided `schemaId`.
 * Requests that specify a retired schemaId/version will fail with HTTP 400 (REST and WebSocket) or a reject message (FIX API).
-* In SBE schema [3:0](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml), a `validValue` named `NonRepresentable` was added to each `enum`. Receiving this value indicates that additional data is available when using the latest schema.
-* In SBE schema [3:1](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml), a message named `NonRepresentableMessage` was added. Receiving this message indicates that additional data is available when using the latest schema. This message may be received as a top-level message, or embedded in a `data` field when the `type` of the `data` field is `messageData`, `messageData8`, `messageData16`, `optionalMessageData`, or `optionalMessageData16`.
-* A `JSON` file describing the schema lifecycle will be stored in this repository; [see here](https://github.com/alisababivip/axvn-docs-api/tree/master/sbe/schemas). This file contains the exact dates for the latest, deprecated, and retired schemas on both the live exchange and spot testnet. Below is a `JSON` example based on the hypothetical timeline above:
+* In SBE schema [3:0](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_0.xml), a `validValue` named `NonRepresentable` was added to each `enum`. Receiving this value indicates that additional data is available when using the latest schema.
+* In SBE schema [3:1](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_3_1.xml), a message named `NonRepresentableMessage` was added. Receiving this message indicates that additional data is available when using the latest schema. This message may be received as a top-level message, or embedded in a `data` field when the `type` of the `data` field is `messageData`, `messageData8`, `messageData16`, `optionalMessageData`, or `optionalMessageData16`.
+* A `JSON` file describing the schema lifecycle will be stored in this repository; [see here](https://github.com/nham-quoc-huan/axvn-docs-api/tree/master/sbe/schemas). This file contains the exact dates for the latest, deprecated, and retired schemas on both the live exchange and spot testnet. Below is a `JSON` example based on the hypothetical timeline above:
 
 ```json
 {
@@ -159,18 +159,18 @@ The REST API, WebSocket API, and FIX API support `SBE` for Spot (SPOT).
 
 1. Download the schema:
 * REST/WebSocket API:
-    * [`spot_prod_latest.xml`](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_prod_latest.xml) for the live exchange.
-    * [`spot_testnet_latest.xml`](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_testnet_latest.xml) for the [spot testnet](https://testnet.axvn.vn).
+    * [`spot_prod_latest.xml`](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_prod_latest.xml) for the live exchange.
+    * [`spot_testnet_latest.xml`](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_testnet_latest.xml) for the [spot testnet](https://testnet.axvn.vn).
 * FIX API:
-    * [`spot_fix_prod_latest.xml`](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_fix_prod_latest.xml) for the live exchange.
-    * [`spot_fix_testnet_latest.xml`](https://github.com/alisababivip/axvn-docs-api/blob/master/sbe/schemas/spot_fix_testnet_latest.xml) for the [spot testnet](https://testnet.axvn.vn).
+    * [`spot_fix_prod_latest.xml`](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_fix_prod_latest.xml) for the live exchange.
+    * [`spot_fix_testnet_latest.xml`](https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/sbe/schemas/spot_fix_testnet_latest.xml) for the [spot testnet](https://testnet.axvn.vn).
 2. Clone and build [`simple-binary-encoding`](https://github.com/real-logic/simple-binary-encoding):
 ```shell
  $ git clone https://github.com/real-logic/simple-binary-encoding.git
  $ cd simple-binary-encoding
  $ ./gradlew
 ```
-3. Run the `SbeTool` code generator. (Refer to sample applications using [Java](https://github.com/alisababivip/axvn-sbe-java-sample-app), [C++](https://github.com/alisababivip/axvn-sbe-cpp-sample-app), and [Rust](https://github.com/alisababivip/axvn-sbe-rust-sample-app) to decode exchange info payloads.)
+3. Run the `SbeTool` code generator. (Refer to sample applications using [Java](https://github.com/nham-quoc-huan/axvn-sbe-java-sample-app), [C++](https://github.com/nham-quoc-huan/axvn-sbe-cpp-sample-app), and [Rust](https://github.com/nham-quoc-huan/axvn-sbe-rust-sample-app) to decode exchange info payloads.)
 
 #### Decimal field encoding
 

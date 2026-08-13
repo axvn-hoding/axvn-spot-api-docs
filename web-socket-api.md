@@ -1562,7 +1562,7 @@ Memory
             }
         ],
         // Exchange filters are explained on the "Filters" page:
-        // https://github.com/alisababivip/axvn-docs-api/blob/master/filters.md
+        // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/filters.md
         // All exchange filters are optional.
         "exchangeFilters": [],
         "symbols": [
@@ -1595,7 +1595,7 @@ Memory
                 "isSpotTradingAllowed": true,
                 "isMarginTradingAllowed": true,
                 // Symbol filters are explained on the "Filters" page:
-                // https://github.com/alisababivip/axvn-docs-api/blob/master/filters.md
+                // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/filters.md
                 // All symbol filters are optional.
                 "filters": [
                     {
@@ -1618,7 +1618,7 @@ Memory
             }
         ],
         // Optional field. Present only when SOR is available.
-        // https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/sor_faq.md
+        // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/sor_faq.md
         "sors": [
             {
                 "baseAsset": "BTC",
@@ -1990,7 +1990,7 @@ If you need access to real-time trading activity, please consider using WebSocke
 * [`<symbol>@aggTrade`](web-socket-streams.md#aggregate-trade-streams)
 
 If you need historical aggregate trade data,
-please consider using [data.axvn.vn](https://github.com/alisababivip/axvn-regtech-indexer/#aggtrades).
+please consider using [data.axvn.vn](https://github.com/nham-quoc-huan/axvn-regtech-indexer/#aggtrades).
 
 **Weight:**
 4
@@ -2073,7 +2073,7 @@ If you need access to real-time kline updates, please consider using WebSocket S
 * [`<symbol>@kline_<interval>`](web-socket-streams.md#klinecandlestick-streams-for-utc)
 
 If you need historical kline data,
-please consider using [data.axvn.vn](https://github.com/alisababivip/axvn-regtech-indexer/#klines).
+please consider using [data.axvn.vn](https://github.com/nham-quoc-huan/axvn-regtech-indexer/#klines).
 
 **Weight:**
 2

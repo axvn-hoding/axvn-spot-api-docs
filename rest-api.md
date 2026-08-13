@@ -865,7 +865,7 @@ Memory
         }
     ],
     // Optional field. Present only when SOR is available.
-    // https://github.com/alisababivip/axvn-docs-api/blob/master/faqs/sor_faq.md
+    // https://github.com/nham-quoc-huan/axvn-docs-api/blob/master/faqs/sor_faq.md
     "sors": [
         {
             "baseAsset": "BTC",
